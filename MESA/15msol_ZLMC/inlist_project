@@ -1,0 +1,71 @@
+
+
+&star_job
+
+      create_pre_main_sequence_model = .true.
+      pgstar_flag = .false.
+
+/ ! end of star_job namelist
+
+&eos
+  ! eos options
+  ! see eos/defaults/eos.defaults
+
+/ ! end of eos namelist
+
+
+&kap
+  ! kap options
+  ! see kap/defaults/kap.defaults
+  use_Type2_opacities = .true.
+  Zbase = 0.006
+
+/ ! end of kap namelist
+
+&controls
+
+      initial_mass = 15
+
+      ! MAIN PARAMS
+      mixing_length_alpha = 1.6
+      initial_z = 0.006
+      do_conv_premix = .true.
+      use_Ledoux_criterion = .true.
+
+      ! OUTPUT
+      max_num_profile_models = 100000
+      profile_interval = 10
+      history_interval = 1
+
+      ! WHEN TO STOP
+       Lnuc_div_L_zams_limit = 0.99d0
+       stop_near_zams = .true.
+
+      ! RESOLUTION
+      mesh_delta_coeff = 0.5
+      time_delta_coeff = 1.0
+
+      ! GOLD TOLERANCES
+      use_gold_tolerances = .true.
+      use_gold2_tolerances = .true.
+      delta_lg_XH_cntr_limit = 0.01
+      min_timestep_limit = 1d-1
+
+      !limit on magnitude of relative change at any grid point
+      delta_lgTeff_limit = 0.005
+      delta_lgTeff_hard_limit = 0.005
+      delta_lgL_limit = 0.005
+
+      write_pulse_data_with_profile = .true.
+      pulse_data_format = 'GYRE'
+
+
+
+/ ! end of controls namelist
+
+
+&pgstar
+
+
+
+/ ! end of pgstar namelist
