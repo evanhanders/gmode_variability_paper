@@ -39,12 +39,6 @@ def interp(transfer_freq, frequ, transfer):
             print(i, mask[idx[0][i]], frequ[idx[0][i]])
     return mask
 
-#function for normalizing volume
-def norm(bad_sound, original, fn):
-    dt = 1/fn
-    original_power = np.sum(original**2*dt)
-    new_power = np.sum(bad_sound**2*dt)
-    return np.sqrt(original_power/new_power)*bad_sound
 
 #read in h5 file to get stellar transfer functions
 filename = 'magnitude_spectra.h5'
@@ -97,14 +91,11 @@ print("...Interpolation Finished")
 filtered3 = filtereddata*mask3
 filtered15 = filtereddata*mask15
 filtered40 = filtereddata*mask40
-norm_filtered3 = norm(filtered3, filtereddata, Fs)
-norm_filtered15 = norm(filtered15, filtereddata, Fs)
-norm_filtered40 = norm(filtered40, filtereddata, Fs)
 
 #take back to time space
-filteredwrite3 = ifour(norm_filtered3)
-filteredwrite15 = ifour(norm_filtered15)
-filteredwrite40 = ifour(norm_filtered40)
+filteredwrite3 = ifour(filtered3)
+filteredwrite15 = ifour(filtered15)
+filteredwrite40 = ifour(filtered40)
 
 # normalization 
 norm15 = np.abs(filteredwrite15).max()
@@ -143,15 +134,15 @@ for ax in [ax1,ax3,ax5]:
     ax.set_yticks([-0.5,0,0.5])
 ax1.set_xticks([])
 ax3.set_xticks([])
-ax2.loglog(frequ, np.conj(norm_filtered3)*norm_filtered3/norm3, label='3 $M_\odot$', color=m3c)
-ax4.loglog(frequ, np.conj(norm_filtered15)*norm_filtered15/norm15, label='15 $M_\odot$', color=m15c)
-ax6.loglog(frequ, np.conj(norm_filtered40)*norm_filtered40/norm40, label='40 $M_\odot$', color=m40c)
+ax2.loglog(frequ, np.conj(filtered3)*filtered3/norm3, label='3 $M_\odot$', color=m3c)
+ax4.loglog(frequ, np.conj(filtered15)*filtered15/norm15, label='15 $M_\odot$', color=m15c)
+ax6.loglog(frequ, np.conj(filtered40)*filtered40/norm40, label='40 $M_\odot$', color=m40c)
 ax6.set_xlabel('Frequency (Hz)')
 for ax, label in zip([ax2, ax4, ax6],['3 $M_\odot$','15 $M_\odot$','40 $M_\odot$']):
-    ax.set_ylim(1e-2,1e14)
+    ax.set_ylim(1e-15,1)
     ax.text(0.98,0.9,label, ha='right',va='center',transform=ax.transAxes)
     ax.set_xlim(21,20000)
     ax.set_ylabel('Amplitude')
-    ax.set_yticks([1,1e4,1e8,1e12])
+    ax.set_yticks([1e-14,1e-10,1e-6,1e-2])
 
 plt.savefig("gmodes_timeseries_PS.pdf",dpi = 400, bbox_inches="tight")
