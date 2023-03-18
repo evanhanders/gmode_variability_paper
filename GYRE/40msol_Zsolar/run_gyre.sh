@@ -6,7 +6,7 @@ export GYRE_DIR="/Users/evananders/software/gyre-7.0/"
 
 rm -rf gyre_output/
 mkdir gyre_output/
-for i in $(seq -f "%02g" 1 16)
+for i in $(seq -f "%02g" 1 15)
 do
     $GYRE_DIR/bin/gyre  gyre_ell$i\.in > output_ell$i\.txt
 done

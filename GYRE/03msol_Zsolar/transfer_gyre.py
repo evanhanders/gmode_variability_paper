@@ -11,7 +11,7 @@ from compstar.waves.clean_gyre_eig import GyreMSGPostProcessor, solar_z
 plot = True
 use_delta_L = False
 Lmin = 1
-Lmax = 16
+Lmax = 15
 ell_list = np.arange(Lmin, Lmax+1)
 folder = 'gyre_output'
 for ell in ell_list:

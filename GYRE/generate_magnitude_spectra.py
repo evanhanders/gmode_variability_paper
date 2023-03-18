@@ -13,7 +13,7 @@ output_file = 'magnitude_spectra.h5'
 
 star_dirs = ['03msol_Zsolar', '40msol_Zsolar', '15msol_ZLMC']
 luminosity_amplitudes = [7.34e-15, 5.3e-10, 2.33e-11]
-Lmax = [15, 15, 15]
+Lmax = 15
 obs_length_days = 365
 obs_length_sec  = obs_length_days*24*60*60
 obs_cadence = 30*60 #30 min
@@ -33,7 +33,7 @@ for i, sdir in enumerate(star_dirs):
     transfer_signal = []
     pure_transfers  = []
 
-    ell_list = np.arange(1, Lmax[i]+1)
+    ell_list = np.arange(1, Lmax+1)
     for ell in ell_list:
         print(sdir, " ell = %i" % ell)
 
@@ -48,10 +48,10 @@ for i, sdir in enumerate(star_dirs):
 
 
 
-    transfers  = np.zeros((Lmax[i], N_data))
-    magnitudes = np.zeros((Lmax[i], N_data))
+    transfers  = np.zeros((Lmax, N_data))
+    magnitudes = np.zeros((Lmax, N_data))
     for j in range(freqs.size-1):
-        for k, oms, signal, transfer in zip(range(Lmax[i]), transfer_oms, transfer_signal, pure_transfers):
+        for k, oms, signal, transfer in zip(range(Lmax), transfer_oms, transfer_signal, pure_transfers):
             good = (2*np.pi*freqs[j+1] >= oms)*(2*np.pi*freqs[j] < oms)
             if np.sum(good) > 0:
                 magnitudes[k,j] = np.max(signal[good])
