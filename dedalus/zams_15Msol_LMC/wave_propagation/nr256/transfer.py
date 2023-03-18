@@ -12,10 +12,10 @@ from scipy.interpolate import interp1d
 from configparser import ConfigParser
 
 import d3_stars
-from d3_stars.defaults import config
-from d3_stars.simulations.parser import name_star
-from d3_stars.simulations.star_builder import find_core_cz_radius
-from d3_stars.simulations.evp_functions import calculate_refined_transfer
+from compstar.defaults import config
+from compstar.dedalus.parser import name_star
+from compstar.dedalus.star_builder import find_core_cz_radius
+from compstar.dedalus.evp_functions import calculate_refined_transfer, SBDF2_gamma_eff
 
 plot = False
 
@@ -41,34 +41,6 @@ with h5py.File(out_file, 'r') as f:
 rho = interpolate.interp1d(rs.flatten(), rhos.flatten())
 chi_rad = interpolate.interp1d(rs.flatten(), chi_rads.flatten())
 N2 = interpolate.interp1d(rs.flatten(), N2s.flatten())
-
-def eff(gam, om, dt):
-
-    # \tilde{omega}
-    omega_tilde = om - 1j*gam
-    # A_+
-    A_plus = (2 + np.sqrt(1-2*1j*omega_tilde*dt)) / (3 + 2*1j*omega_tilde*dt)
-    #\tilde{omega}_{eff}
-    omega_tilde_eff = (1/(-1j*dt))*np.log(A_plus)
-
-    return -omega_tilde_eff.imag, omega_tilde_eff.real
-
-#def eff(gam, om, dt):
-#    # note: this approximation is only valid for ||gamma + i*omega|dt| < 1
-#
-#    GO = gam + 1j*om
-#
-#    num = GO # O(1) ~ leading order om / higher order correction to gam
-#    num += (1/3) * GO**3 * dt**2 # ~ first higher order correction to om
-#    num += (1/4) * GO**4 * dt**3 # ~ leading order gam
-#    num += (9/20) * GO**5 * dt**4 # ~ second higher order correction to om
-#    num += (5/8) * GO**6 * dt**5 # ~ higher order correction to gam
-#
-#    # optional: improves 5th sig fig of gamma_eff, and 7th of omega_eff
-#    # num += (57/56) * GO**7 * dt**6
-#    # num += (105/64) * GO**8 * dt**7
-#
-#    return num.real, num.imag
 
 if __name__ == '__main__':
 
@@ -117,7 +89,7 @@ if __name__ == '__main__':
 
             eff_evalues = []
             for ev in values:
-                gamma_eff, omega_eff = eff(-ev.imag, np.abs(ev.real), timestep)
+                gamma_eff, omega_eff = SBDF2_gamma_eff(-ev.imag, np.abs(ev.real), timestep)
     #            gamma_eff, omega_eff = -ev.imag, np.abs(ev.real)
                 if ev.real < 0:
                     eff_evalues.append(-omega_eff - 1j*gamma_eff)
