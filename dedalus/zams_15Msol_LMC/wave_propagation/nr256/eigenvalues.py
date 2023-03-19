@@ -19,7 +19,7 @@ from scipy.interpolate import interp1d
 import logging
 logger = logging.getLogger(__name__)
 
-from d3_stars.simulations.evp_functions import StellarEVP
+from compstar.dedalus.evp_functions import StellarEVP
 
 if __name__ == '__main__':
     eigenvalues = StellarEVP()
