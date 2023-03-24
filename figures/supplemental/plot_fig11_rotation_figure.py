@@ -15,6 +15,7 @@ from matplotlib.ticker import MaxNLocator
 from scipy import interpolate
 from scipy.interpolate import griddata
 from scipy.interpolate import interp2d
+from matplotlib.patches import ConnectionPatch
 
 
 
@@ -32,6 +33,10 @@ plt.rcParams['mathtext.rm'] = 'serif'
 
 
 ############### SOME DEFINITIONS
+fiducial_ell = 3.111
+fiducial_T = 4.517
+fiducial_Ro = 0.6785 #calculated from MESA model -- see fig13 file
+fiducial_Rop = fiducial_Ro / 0.7 #taking <sin i> = 0.7.
 rsun=6.9598e10
 msun=1.9892e33
 lsun=3.8418e33
@@ -216,21 +221,59 @@ rot_period = 2.0*3.1415*i_radii*rsun/(i_vsini*1e5)
 rossby = rot_period/(i_turnover*24*3600)
 
 #Now make the figure.
-fig = plt.figure(figsize=(7.5, 3))
-ax1 = fig.add_axes([0.03, 0.05, 0.42, 0.81])
-ax2 = fig.add_axes([0.55, 0.05, 0.42, 0.81])
-cax = fig.add_axes([0.98, 0.05, 0.02, 0.81])
+fig = plt.figure(figsize=(7.5, 5))
+ax1 = fig.add_axes([0.03, 0.55, 0.42, 0.40])
+ax2 = fig.add_axes([0.55, 0.55, 0.42, 0.40])
+ax3 = fig.add_axes([0.03, 0.05, 0.42, 0.40])
+ax4 = fig.add_axes([0.55, 0.05, 0.45, 0.40])
+cax = fig.add_axes([0.98, 0.55, 0.02, 0.40])
+
 
 sizes = [2.6**i for i in i_LogL]  # Get unique values of i_LogL and compute corresponding marker sizes
-ax1.scatter(i_vsini,i_alpha0,s=sizes, c=i_LogT,cmap='viridis')
-ax1.set_yscale('log')
-ax1.set_ylabel(r'$\alpha_0$ ($\mu$mag)')
-ax1.set_xlabel(r'$v\,\sin\,i$')
+
+fiducial  = (i_LogT > fiducial_T   - 0.2)*(i_LogT < fiducial_T + 0.2)
+fiducial *= (i_LogL > fiducial_ell - 0.2)*(i_LogL < fiducial_ell + 0.2)
+
+non_fiducial = np.logical_or(i_LogT <= fiducial_T   - 0.2, i_LogT >= fiducial_T + 0.2)
+non_fiducial = np.logical_or(non_fiducial,i_LogL <= fiducial_ell - 0.2)
+non_fiducial = np.logical_or(non_fiducial,i_LogL >= fiducial_ell + 0.2)
+
+norm = mpl.colors.Normalize(vmin=4, vmax=4.7)
+sm = mpl.cm.ScalarMappable(norm=norm, cmap=mpl.cm.viridis)
+
+for i in range(i_LogL.size):
+    if fiducial[i]:
+        ax1.scatter(i_vsini[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
+        ax3.scatter(i_vsini[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
+    else:
+        ax1.scatter(i_vsini[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, linewidth=0)
+for ax in [ax1, ax3]:
+    ax.set_yscale('log')
+    ax.set_ylabel(r'$\alpha_0$ ($\mu$mag)')
+    ax.set_xlabel(r'$v\,\sin\,i$ (km s$^{-1}$)')
 
 
 
 sc = ax2.scatter(rossby, i_alpha0, s=sizes, c=i_LogT, cmap='viridis')
 handles, labels = sc.legend_elements("sizes")
+ax2.cla()
+for ax in [ax2, ax4]:
+    ax.set_xlabel(r'Ro$_{\rm p}$ ')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    ax.axvline(fiducial_Rop, c='k', lw=0.5)
+    ax.fill_between([fiducial_Rop, 1e4], 1e-4, 1e5, facecolor=(0.5,0.5,0.5,0.1))
+    ax.text(0.98, 0.08, 'Slow Rotators', ha='right', va='center', transform=ax.transAxes)
+
+
+for i in range(i_LogL.size):
+    if fiducial[i]:
+        ax2.scatter(rossby[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
+        ax4.scatter(rossby[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
+        print(i_alpha0[i], i_LogT[i], i_LogL[i])
+    else:
+        ax2.scatter(rossby[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, linewidth=0)
+
 
 # Get six representative i_LogL values to display in the legend
 unique_i_LogL = np.unique(i_LogL)
@@ -246,12 +289,36 @@ sm.set_array(i_LogT)
 cbar = plt.colorbar(sm, cax=cax)
 cbar.set_label(lgteff)
 
- 
+ax1.set_xlim(0, None)
+ax1.set_ylim(4e0, 1e4)
+ax2.set_ylim(4e0, 1e4)
+ax3.set_ylim(1e-1, 3e2)
+ax4.set_ylim(1e-1, 3e2)
 
 #ax2.set_ylabel(r'$\log_{10} \alpha_0$')
-ax2.set_xlabel(r'Ro$_{\rm p}$ ')
-ax2.set_xscale('log')
-ax2.set_yscale('log')
+ax2.set_xlim(2e-2, 3e1)
+ax4.set_xlim(1e-1, 3e0)
+ax3.set_xlim(0, 35)
 #ax.text(1,3.5,'Bowman+2020',fontsize=22)
+
+
+
+con1 = ConnectionPatch(xyA=(35,4e0), xyB=(35,3e2), coordsA='data', coordsB='data', axesA=ax1, axesB=ax3, color='grey', lw=1, alpha=0.5)
+ax1.add_artist(con1)
+ax1.plot([35, 35], [4e0, 8e0], color='grey', alpha=0.5)
+
+
+con2 = ConnectionPatch(xyA=(1e-1,4e0), xyB=(1e-1,3e2), coordsA='data', coordsB='data', axesA=ax2, axesB=ax4, color='grey', lw=1, alpha=0.5)
+ax2.add_artist(con2)
+ax2.plot([1e-1, 1e-1], [4e0, 8e0], color='grey', alpha=0.5)
+con2 = ConnectionPatch(xyA=(3e0,4e0), xyB=(3e0,3e2), coordsA='data', coordsB='data', axesA=ax2, axesB=ax4, color='grey', lw=1, alpha=0.5)
+ax2.add_artist(con2)
+ax2.plot([3e0, 3e0], [4e0, 8e0], color='grey', alpha=0.5)
+
+#Fiducial rotating star
+from palettable.colorbrewer.qualitative import Dark2_5 as cmap
+ax3.scatter(21.7, 0.8, c=cmap.mpl_colors[2], marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
+ax4.scatter(fiducial_Rop, 0.8, c=cmap.mpl_colors[2], marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
+
 plt.savefig("fig11_rednoise_Ro.pdf",bbox_inches='tight', dpi=300)
 plt.savefig("fig11_rednoise_Ro.png",bbox_inches='tight', dpi=300)

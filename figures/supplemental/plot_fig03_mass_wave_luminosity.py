@@ -123,7 +123,7 @@ for i, sdir in enumerate(subdirs):
         good1 = (freqs > freq_range[0])*(freqs < freq_range[1])
         good2 = ells == 1
         log_fitAmp = np.mean( np.log10(lum/fitfunc)[good1, good2] )
-        print('{} fitAmp: {:.3e}'.format(sdir, 10**(log_fitAmp)))
+        print('{} / L_conv {:.3e}, fitAmp: {:.3e}'.format(sdir, file_dict['Lconv_cz'], 10**(log_fitAmp)))
 
 
 
