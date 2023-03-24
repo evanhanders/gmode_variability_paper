@@ -97,11 +97,11 @@ vmacro=df1['vmacro']
 LogT=df1['LogT']
 LogL=df1['LogL']
 
-nuchar = [float(item) for item in nuchar]
-alpha0 = [float(item) for item in alpha0]
-vsini = [float(item) for item in vsini]
-LogT = [float(item) for item in LogT]
-LogL = [float(item) for item in LogL]
+nuchar = np.array([float(item) for item in nuchar])
+alpha0 = np.array([float(item) for item in alpha0])
+vsini  = np.array([float(item) for item in vsini])
+LogT   = np.array([float(item) for item in LogT])
+LogL   = np.array([float(item) for item in LogL])
 #vmacro = [float(item) for item in vmacro]
 
 print (df1)
@@ -188,9 +188,12 @@ ax.set_xlim([4.83,4.1])
 i_turnover=interpolator(LogT,LogL)
 i_radii = interpolator_r(LogT,LogL)
 
+
+
 print(len(i_turnover))
 
 print(i_radii)
+#plt.show()
 
 # Copy Mask
 mask=i_radii.mask
@@ -225,28 +228,42 @@ fig = plt.figure(figsize=(7.5, 5))
 ax1 = fig.add_axes([0.03, 0.55, 0.42, 0.40])
 ax2 = fig.add_axes([0.55, 0.55, 0.42, 0.40])
 ax3 = fig.add_axes([0.03, 0.05, 0.42, 0.40])
-ax4 = fig.add_axes([0.55, 0.05, 0.45, 0.40])
-cax = fig.add_axes([0.98, 0.55, 0.02, 0.40])
+ax4 = fig.add_axes([0.55, 0.05, 0.42, 0.40])
+cax1 = fig.add_axes([0.98, 0.55, 0.02, 0.40])
+cax2 = fig.add_axes([0.98, 0.05, 0.02, 0.40])
 
 
-sizes = [2.6**i for i in i_LogL]  # Get unique values of i_LogL and compute corresponding marker sizes
+sizes = [2.6**i for i in LogL]  # Get unique values of i_LogL and compute corresponding marker sizes
 
-fiducial  = (i_LogT > fiducial_T   - 0.2)*(i_LogT < fiducial_T + 0.2)
-fiducial *= (i_LogL > fiducial_ell - 0.2)*(i_LogL < fiducial_ell + 0.2)
 
-non_fiducial = np.logical_or(i_LogT <= fiducial_T   - 0.2, i_LogT >= fiducial_T + 0.2)
-non_fiducial = np.logical_or(non_fiducial,i_LogL <= fiducial_ell - 0.2)
-non_fiducial = np.logical_or(non_fiducial,i_LogL >= fiducial_ell + 0.2)
+fiducial  = (LogT > fiducial_T   - 0.2)*(LogT < fiducial_T + 0.2)
+fiducial *= (LogL > fiducial_ell - 0.2)*(LogL < fiducial_ell + 0.2)
+
+non_fiducial = np.logical_or(LogT <= fiducial_T   - 0.2, LogT >= fiducial_T + 0.2)
+non_fiducial = np.logical_or(non_fiducial,LogL <= fiducial_ell - 0.2)
+non_fiducial = np.logical_or(non_fiducial,LogL >= fiducial_ell + 0.2)
+
+
 
 norm = mpl.colors.Normalize(vmin=4, vmax=4.7)
 sm = mpl.cm.ScalarMappable(norm=norm, cmap=mpl.cm.viridis)
+norm2 = mpl.colors.Normalize(vmin=4.35, vmax=4.53)
+sm2 = mpl.cm.ScalarMappable(norm=norm2, cmap=mpl.cm.viridis)
 
-for i in range(i_LogL.size):
+for i in range(LogL.size):
     if fiducial[i]:
-        ax1.scatter(i_vsini[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
-        ax3.scatter(i_vsini[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
+        ax1.scatter(vsini[i],alpha0[i],s=sizes[i], c=sm.to_rgba(LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
+        ax3.scatter(vsini[i],alpha0[i],s=sizes[i], c=sm2.to_rgba(LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
     else:
-        ax1.scatter(i_vsini[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, linewidth=0)
+        ax1.scatter(vsini[i],alpha0[i],s=sizes[i], c=sm.to_rgba(LogT[i]), alpha=0.7, linewidth=0)
+
+#for i in range(i_LogL.size):
+#    if fiducial[i]:
+#        ax1.scatter(i_vsini[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
+#        ax3.scatter(i_vsini[i],i_alpha0[i],s=sizes[i], c=sm2.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
+#    else:
+#        ax1.scatter(i_vsini[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, linewidth=0)
+#
 for ax in [ax1, ax3]:
     ax.set_yscale('log')
     ax.set_ylabel(r'$\alpha_0$ ($\mu$mag)')
@@ -254,6 +271,7 @@ for ax in [ax1, ax3]:
 
 
 
+sizes = [2.6**i for i in i_LogL]  # Get unique values of i_LogL and compute corresponding marker sizes
 sc = ax2.scatter(rossby, i_alpha0, s=sizes, c=i_LogT, cmap='viridis')
 handles, labels = sc.legend_elements("sizes")
 ax2.cla()
@@ -265,11 +283,18 @@ for ax in [ax2, ax4]:
     ax.fill_between([fiducial_Rop, 1e4], 1e-4, 1e5, facecolor=(0.5,0.5,0.5,0.1))
     ax.text(0.98, 0.08, 'Slow Rotators', ha='right', va='center', transform=ax.transAxes)
 
+fiducial  = (i_LogT > fiducial_T   - 0.2)*(i_LogT < fiducial_T + 0.2)
+fiducial *= (i_LogL > fiducial_ell - 0.2)*(i_LogL < fiducial_ell + 0.2)
+
+non_fiducial = np.logical_or(i_LogT <= fiducial_T   - 0.2, i_LogT >= fiducial_T + 0.2)
+non_fiducial = np.logical_or(non_fiducial,i_LogL <= fiducial_ell - 0.2)
+non_fiducial = np.logical_or(non_fiducial,i_LogL >= fiducial_ell + 0.2)
+
 
 for i in range(i_LogL.size):
     if fiducial[i]:
         ax2.scatter(rossby[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
-        ax4.scatter(rossby[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
+        ax4.scatter(rossby[i],i_alpha0[i],s=sizes[i], c=sm2.to_rgba(i_LogT[i]), alpha=0.7, edgecolors='k', linewidths=0.5)
         print(i_alpha0[i], i_LogT[i], i_LogL[i])
     else:
         ax2.scatter(rossby[i],i_alpha0[i],s=sizes[i], c=sm.to_rgba(i_LogT[i]), alpha=0.7, linewidth=0)
@@ -284,10 +309,12 @@ labels = [f'{i}' for i in selected_i_LogL]  # Create custom legend labels with s
 legend1 = ax1.legend(handles, labels, loc='lower right', title=lgell, ncol=2, frameon=False)
 
 # Add legend for color map
-sm = plt.cm.ScalarMappable(cmap='viridis')
-sm.set_array(i_LogT)
-cbar = plt.colorbar(sm, cax=cax)
+cbar = plt.colorbar(sm, cax=cax1)
 cbar.set_label(lgteff)
+
+cbar = plt.colorbar(sm2, cax=cax2)
+cbar.set_label(lgteff)
+
 
 ax1.set_xlim(0, None)
 ax1.set_ylim(4e0, 1e4)
@@ -317,8 +344,8 @@ ax2.plot([3e0, 3e0], [4e0, 8e0], color='grey', alpha=0.5)
 
 #Fiducial rotating star
 from palettable.colorbrewer.qualitative import Dark2_5 as cmap
-ax3.scatter(21.7, 0.8, c=cmap.mpl_colors[2], marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
-ax4.scatter(fiducial_Rop, 0.8, c=cmap.mpl_colors[2], marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
+ax3.scatter(21.7, 0.4, c=sm2.to_rgba(fiducial_T), marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
+ax4.scatter(fiducial_Rop, 0.4, c=sm2.to_rgba(fiducial_T), marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
 
 plt.savefig("fig11_rednoise_Ro.pdf",bbox_inches='tight', dpi=300)
 plt.savefig("fig11_rednoise_Ro.png",bbox_inches='tight', dpi=300)

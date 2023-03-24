@@ -83,7 +83,7 @@ for i, sdir in enumerate(subdirs):
         fitfunc = ((freqs/hz_to_invday)**(-13/2))[:,None] * np.sqrt(ells*(ells+1))[None,:]
         good1 = (freqs > freq_range[0])*(freqs < freq_range[1])
         good2 = ells == 1
-        log_fitAmp = np.mean( np.log10(lum/fitfunc)[good1, good2] )
+        log_fitAmp = np.mean( np.log10(np.abs(lum)/fitfunc)[good1, good2] )
         print('{} / L_conv {:.3e}, fitAmp: {:.3e}'.format(sdir, file_dict['Lconv_cz'], 10**(log_fitAmp)))
 
     for ell, ax in zip([1,2], [ax1_1, ax1_2]):
@@ -91,14 +91,14 @@ for i, sdir in enumerate(subdirs):
         print('ell = {}'.format(ell))
         ax.loglog(freqs,  np.abs(lum[:, ells == ell]), color=color)
         if i == len(subdirs)-1:
-            ax.loglog(freqs, 1e-9*(freqs/hz_to_invday)**(-6.5)*kh**4, c='k', label=r'$(3\times10^{-11})(f/Hz)^{-6.5}\left[\sqrt{\ell(\ell+1)}\,\right]^{4}$', zorder=7, lw=0.5)
+            ax.loglog(freqs, 10**log_fitAmp*(freqs/hz_to_invday)**(-6.5)*kh**4, c='k', label=r'$(3\times10^{-11})(f/Hz)^{-6.5}\left[\sqrt{\ell(\ell+1)}\,\right]^{4}$', zorder=7, lw=0.5)
             ax.text(0.99, 0.965, r'$\ell = {{{}}}$'.format(ell), ha='right', va='top', transform=ax.transAxes)
             ax.set_ylim(1e10, 1e33)
             ax.set_ylabel(r'$L_w$ (erg$\,\,$s$^{-1}$)')
 
     for freq, ax in zip([0.4, 0.8], [ax2_1, ax2_2]):
         kh = np.sqrt(ells*(ells+1))
-        ax.loglog(ells, 1e-9*(freq/hz_to_invday)**(-6.5)*kh**4, c='k', label=r'$(3\times10^{-11})(f/Hz)^{-6.5}\left[\sqrt{\ell(\ell+1)}\,\right]^{4}$', zorder=7, lw=0.5)
+        ax.loglog(ells, 10**log_fitAmp*(freq/hz_to_invday)**(-6.5)*kh**4, c='k', label=r'$(3\times10^{-11})(f/Hz)^{-6.5}\left[\sqrt{\ell(\ell+1)}\,\right]^{4}$', zorder=7, lw=0.5)
         print('f = {}'.format(freq))
         ax.loglog(ells,  lum[ freqs  > freq, :][0,:],    color=color)
         ax.text(0.01, 0.98, r'$f = {{{}}}$ d$^{{-1}}$'.format(freq), ha='left', va='top', transform=ax.transAxes)
@@ -135,8 +135,8 @@ Lmax = [15, 15]
 out_f = h5py.File(output_file, 'r')
 freqs = out_f['frequencies'][()] * 24 * 60 * 60
 
-alpha = 0.8e0 
-alpha_latex = '0.8 $\mu$mag'
+alpha = 0.4e0 
+alpha_latex = '0.4 $\mu$mag'
 nu_char = 0.16
 gamma = 3.9
 

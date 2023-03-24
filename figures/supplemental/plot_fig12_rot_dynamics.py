@@ -277,7 +277,7 @@ with h5py.File(rot_file, 'r') as rf:
 
             if first: #static colorbar
                 minmax_s1 = np.array((2*np.std(eq_field_s1),))
-                cmap = matplotlib.cm.get_cmap('PuOr_r')
+                cmap = matplotlib.cm.get_cmap('PiYG_r')
     #                cmap = matplotlib.cm.get_cmap('RdBu_r')
                 norm = matplotlib.colors.Normalize(vmin=-minmax_s1[0], vmax=minmax_s1[0])
 
