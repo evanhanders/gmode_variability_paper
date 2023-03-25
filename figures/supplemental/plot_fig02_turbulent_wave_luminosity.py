@@ -55,7 +55,7 @@ for i, sdir, re in zip(range(len(re_vals)), subdirs, re_vals):
             ax.set_ylim(1e-29, 1e-5)
             ax.set_xlim(1e-2, 2e1)
             if ell == 1:
-                ax.text(0.3, 0.92, r'$f^{-6.5}$', rotation=0, transform=ax.transAxes, ha='left', va='center')
+                ax.text(0.3, 0.91, r'$f^{-6.5}$', rotation=0, transform=ax.transAxes, ha='left', va='center')
             ax.text(0.99, 0.97, r'$\ell = {{{}}}$'.format(ell), ha='right', va='top', transform=ax.transAxes)
             ax.set_xlabel(r'$f$ (d$^{-1}$)')
             ax.set_ylabel(r'$|L_{w}|/L_{*}$')

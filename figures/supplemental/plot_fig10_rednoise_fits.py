@@ -19,7 +19,7 @@ def red_noise(nu, alpha0, nu_char, gamma=2):
     return alpha0/(1 + (nu/nu_char)**gamma)
 
 
-star_dirs = ['3msol', '15msol', '40msol']
+star_dirs = ['03msol_Zsolar', '15msol_ZLMC', '40msol_Zsolar']
 Lmax = [15, 15, 15]
 alpha0 = [9e-3, 1.2e-1, 3e-1]
 alpha_latex = [ r'$9 \times 10^{-3}$ $\mu$mag',\

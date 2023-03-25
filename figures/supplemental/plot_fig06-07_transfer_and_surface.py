@@ -54,8 +54,6 @@ for use_fit in [False, True]:
         axs = [ax1, ax2, ax3, ax4, ax5, ax6]
         cmap = mpl.cm.plasma
         Lmax = 6
-        norm = mpl.colors.Normalize(vmin=1, vmax=Lmax)
-        sm = mpl.cm.ScalarMappable(norm=norm, cmap=mpl.colors.ListedColormap(Dark2_5.mpl_colors[:Lmax]))
 
         for j in range(1,Lmax+1):
             axs[j-1].loglog(freqs, s1[:,ells==j], color='k', lw=1, label='simulation')

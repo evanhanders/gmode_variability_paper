@@ -176,8 +176,8 @@ ax3.set_ylabel(r'$\log_{10}\, \mathscr{L} / \mathscr{L}_\odot$')
 ax3.set_xlabel(r'$\log_{10}\, $T$_{\rm eff}/$K')
 
 plt.axes(ax1)
-ax1.text(0.06, 1.5e-1, 'Predicted wave signal', ha='left')
-ax1.text(0.25, 3.5e2, 'Observed red noise', ha='left', va='center')
+ax1.text(0.06, 1.5e-1, 'Predicted wave signal $(15 M_{\odot})$', ha='left', color=cmap.mpl_colors[2])
+ax1.text(0.25, 3.5e2, 'Observed red noise', ha='left', va='center', color=cmap.mpl_colors[3])
 
 for i in range(len(LogL)):
     color = star_colors[i]
@@ -200,11 +200,11 @@ for i in range(3):
 
 #con2 = ConnectionPatch(xyA=(1e1,1e-4), xyB=(4e-2,1e-4), coordsA='data', coordsB='data', axesA=ax1, axesB=ax2, color='grey', lw=0.5)
 #ax1.add_artist(con2)
-con1 = ConnectionPatch(xyA=(1e1,1e0), xyB=(4e-2,1e0), coordsA='data', coordsB='data', axesA=ax1, axesB=ax2, color='grey', lw=1)
+con1 = ConnectionPatch(xyA=(1e1,1e0), xyB=(5e-2,1e0), coordsA='data', coordsB='data', axesA=ax1, axesB=ax2, color='grey', lw=1)
 ax1.add_artist(con1)
 ax1.plot([7e0,1e1],[1e0, 1e0], c='grey', lw=1)
 
-ax1.text(0.12, 0.04, r'15 $M_{\odot}$', color=cmap.mpl_colors[2], ha='center', va='center', size=8)
+#ax1.text(0.12, 0.04, r'15 $M_{\odot}$', color=cmap.mpl_colors[2], ha='center', va='center', size=8)
 ax2.text(8e-2, 3.3e-1, r'40 $M_{\odot}$', color=cmap.mpl_colors[1], ha='center', va='center', size=8)
 ax2.text(8e-2, 1.1e-1, r'15 $M_{\odot}$', color=cmap.mpl_colors[2], ha='center', va='center', size=8)
 ax2.text(1.3e-1, 1.1e-2, r'3 $M_{\odot}$', color=cmap.mpl_colors[0], ha='center', va='center', size=8)

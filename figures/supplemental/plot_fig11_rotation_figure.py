@@ -36,7 +36,7 @@ plt.rcParams['mathtext.rm'] = 'serif'
 fiducial_ell = 3.111
 fiducial_T = 4.517
 fiducial_Ro = 0.6785 #calculated from MESA model -- see fig13 file
-fiducial_Rop = fiducial_Ro / 0.7 #taking <sin i> = 0.7.
+fiducial_Rop = fiducial_Ro / (np.pi/4) #taking <sin i> = pi/4.
 rsun=6.9598e10
 msun=1.9892e33
 lsun=3.8418e33
@@ -289,8 +289,9 @@ for ax in [ax2, ax4]:
     ax.set_xlabel(r'Ro$_{\rm p}$ ')
     ax.set_xscale('log')
     ax.set_yscale('log')
-    ax.axvline(fiducial_Rop, c='k', lw=0.5)
-    ax.fill_between([fiducial_Rop, 1e4], 1e-4, 1e5, facecolor=(0.5,0.5,0.5,0.1))
+    ax.axvline(1, c='k', lw=0.5)
+#    ax.axvline(fiducial_Rop, c='k', lw=0.5)
+    ax.fill_between([1, 1e4], 1e-4, 1e5, facecolor=(0.5,0.5,0.5,0.1))
     ax.text(0.98, 0.08, 'Slow Rotators', ha='right', va='center', transform=ax.transAxes)
 
 

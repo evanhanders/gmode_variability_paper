@@ -20,7 +20,7 @@ plt.rcParams['mathtext.rm'] = 'serif'
 output_file = '../../data/dedalus/predictions/magnitude_spectra.h5'
 
 
-star_dirs = ['3msol', '15msol', '40msol']
+star_dirs = ['03msol_Zsolar', '15msol_ZLMC', '40msol_Zsolar']
 Lmax = [15, 15, 15]
 out_f = h5py.File(output_file, 'r')
 freqs = out_f['frequencies'][()] * 24 * 60 * 60

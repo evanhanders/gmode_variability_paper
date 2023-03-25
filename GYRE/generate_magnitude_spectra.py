@@ -13,7 +13,7 @@ output_file = 'magnitude_spectra.h5'
 
 star_dirs = ['03msol_Zsolar', '40msol_Zsolar', '15msol_ZLMC', '15msol_ZLMC']
 luminosity_amplitudes = [7.34e-15, 5.3e-10, 2.33e-11, 3.004e-10]
-min_trustworthy = np.array([8e-2, 5e-2, 6e-2, 6e-2])/(24*60*60) #1/d -> Hz
+min_trustworthy = np.array([3e-2, 3e-2, 3e-2, 3e-2])/(24*60*60) #1/d -> Hz
 Lmax = 15
 obs_length_days = 365
 obs_length_sec  = obs_length_days*24*60*60
@@ -79,3 +79,8 @@ for i, sdir in enumerate(star_dirs):
     plt.savefig('obs_ell_contributions_{}.png'.format(key), bbox_inches='tight')
     plt.clf()
 out_f.close()
+
+#copy file into folder where figure scripts read it
+import shutil
+shutil.copyfile(output_file, '../data/dedalus/predictions/{}'.format(output_file))
+
