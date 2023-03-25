@@ -9,7 +9,7 @@
 
 &mode
   l = 1 ! Harmonic degree
-  n_pg_min = -120
+  n_pg_min = -100
   n_pg_max = -1
 /
 
@@ -31,7 +31,7 @@
   grid_type = 'INVERSE' ! Scan grid uniform in inverse frequency
   freq_min_units = 'UHZ'
   freq_max_units = 'UHZ'
-  freq_min = 0.3        ! Minimum frequency to scan from
+  freq_min = 0.2        ! Minimum frequency to scan from
   freq_max = 100        ! Maximum frequency to scan to
   n_freq = 5000          ! Number of frequency points in scan
 /
