@@ -11,8 +11,9 @@ plt.rcParams['mathtext.rm'] = 'serif'
 eig_dir = 'gyre_output'
 output_file = 'magnitude_spectra.h5'
 
-star_dirs = ['03msol_Zsolar', '40msol_Zsolar', '15msol_ZLMC']
-luminosity_amplitudes = [7.34e-15, 5.3e-10, 2.33e-11]
+star_dirs = ['03msol_Zsolar', '40msol_Zsolar', '15msol_ZLMC', '15msol_ZLMC']
+luminosity_amplitudes = [7.34e-15, 5.3e-10, 2.33e-11, 3.004e-10]
+min_trustworthy = np.array([8e-2, 5e-2, 6e-2, 6e-2])/(24*60*60) #1/d -> Hz
 Lmax = 15
 obs_length_days = 365
 obs_length_sec  = obs_length_days*24*60*60
@@ -52,6 +53,7 @@ for i, sdir in enumerate(star_dirs):
     magnitudes = np.zeros((Lmax, N_data))
     for j in range(freqs.size-1):
         for k, oms, signal, transfer in zip(range(Lmax), transfer_oms, transfer_signal, pure_transfers):
+            if freqs[j+1] < min_trustworthy[i]: continue
             good = (2*np.pi*freqs[j+1] >= oms)*(2*np.pi*freqs[j] < oms)
             if np.sum(good) > 0:
                 magnitudes[k,j] = np.max(signal[good])
@@ -60,16 +62,20 @@ for i, sdir in enumerate(star_dirs):
                 magnitudes[k,j] = signal[np.argmin(np.abs(2*np.pi*freqs[j] - oms))]
                 transfers[k,j]  = transfer[np.argmin(np.abs(2*np.pi*freqs[j] - oms))]
 
+    if i == 3:
+        key = 'rot_' + sdir
+    else:
+        key = sdir
     total_signal = np.sqrt(np.sum(magnitudes**2, axis=0))
-    out_f['{}_magnitude_cube'.format(sdir)] = magnitudes
-    out_f['{}_transfer_cube'.format(sdir)] = transfers
-    out_f['{}_magnitude_sum'.format(sdir)] = total_signal
+    out_f['{}_magnitude_cube'.format(key)] = magnitudes
+    out_f['{}_transfer_cube'.format(key)] = transfers
+    out_f['{}_magnitude_sum'.format(key)] = total_signal
     plt.loglog(freqs, total_signal, c='k')
     plt.legend()
     plt.xlim(1e-7, 1e-3)
     plt.ylim(1e-6, 1)
     plt.xlabel('freq (Hz)')
     plt.ylabel(r'$\Delta m\,(\mu\rm{mag})$')
-    plt.savefig('obs_ell_contributions_{}.png'.format(sdir), bbox_inches='tight')
+    plt.savefig('obs_ell_contributions_{}.png'.format(key), bbox_inches='tight')
     plt.clf()
 out_f.close()

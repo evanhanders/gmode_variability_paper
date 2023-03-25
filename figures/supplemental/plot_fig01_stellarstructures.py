@@ -10,6 +10,8 @@ plt.rcParams['mathtext.rm'] = 'serif'
 
 from compstar.tools.mesa import DimensionalMesaReader
 
+Rsun = 7e10
+
 mesa_root = '../../MESA/'
 mesa_files = [  '03msol_Zsolar/LOGS/profile43.data',\
                 '15msol_ZLMC/LOGS/profile47.data',\
@@ -95,27 +97,27 @@ axs += row5_axs
 
 for i in range(len(mesa_files)):
     if i < 3: 
-        row1_axs[i].plot(structures[i].structure['r'], structures[i].structure['rho'],      c='k', lw=2, label='MESA')    
-        row2_axs[i].plot(structures[i].structure['r'], structures[i].structure['N2'],       c='k', lw=2)    
-        row3_axs[i].plot(structures[i].structure['r'], structures[i].structure['grad_s'],   c='k', lw=2)    
-        row4_axs[i].plot(structures[i].structure['r'], structures[i].structure['rad_diff'], c='k', lw=2)
-        row5_axs[i].plot(structures[i].structure['r'], structures[i].structure['L_conv']/structures[i].structure['Luminosity'].max(), c='k', lw=2)
+        row1_axs[i].plot(structures[i].structure['r']/structures[i].structure['R_star'], structures[i].structure['rho'],      c='k', lw=2, label='MESA')    
+        row2_axs[i].plot(structures[i].structure['r']/structures[i].structure['R_star'], structures[i].structure['N2'],       c='k', lw=2)    
+        row3_axs[i].plot(structures[i].structure['r']/structures[i].structure['R_star'], structures[i].structure['grad_s'],   c='k', lw=2)    
+        row4_axs[i].plot(structures[i].structure['r']/structures[i].structure['R_star'], structures[i].structure['rad_diff'], c='k', lw=2)
+        row5_axs[i].plot(structures[i].structure['r']/structures[i].structure['R_star'], structures[i].structure['L_conv']/structures[i].structure['Luminosity'].max(), c='k', lw=2)
 
         r, ln_rho, rho, grad_s, N2, chi_rad, r_l, sim_lum = get_dedalus_stratification(i, ['B', 'S1'])
 
-        row1_axs[i].plot(r, rho,     c=cmap.mpl_colors[0],   lw=0.75, zorder=10, label='WG sim')    
-        row2_axs[i].plot(r, N2,      c=cmap.mpl_colors[0],   lw=0.75, zorder=10)    
-        row3_axs[i].plot(r, grad_s,  c=cmap.mpl_colors[0],   lw=0.75, zorder=10)    
-        row4_axs[i].plot(r, chi_rad, c=cmap.mpl_colors[0],   lw=0.75, zorder=10)
-        row5_axs[i].plot(r_l, sim_lum/structures[i].structure['Luminosity'].max(), c=cmap.mpl_colors[0], lw=0.75, zorder=10)
+        row1_axs[i].plot(r/structures[i].structure['R_star'], rho,     c=cmap.mpl_colors[0],   lw=0.75, zorder=10, label='WG sim')    
+        row2_axs[i].plot(r/structures[i].structure['R_star'], N2,      c=cmap.mpl_colors[0],   lw=0.75, zorder=10)    
+        row3_axs[i].plot(r/structures[i].structure['R_star'], grad_s,  c=cmap.mpl_colors[0],   lw=0.75, zorder=10)    
+        row4_axs[i].plot(r/structures[i].structure['R_star'], chi_rad, c=cmap.mpl_colors[0],   lw=0.75, zorder=10)
+        row5_axs[i].plot(r_l/structures[i].structure['R_star'], sim_lum/structures[i].structure['Luminosity'].max(), c=cmap.mpl_colors[0], lw=0.75, zorder=10)
     else:
         r, ln_rho, rho, grad_s, N2, chi_rad, r_l, sim_lum = get_dedalus_stratification(i, ['B', 'S1', 'S2'])
 
-        row1_axs[1].plot(r, rho,     c=cmap.mpl_colors[2], label='WP sim')    
-        row2_axs[1].plot(r, N2,      c=cmap.mpl_colors[2])    
-        row3_axs[1].plot(r, grad_s,  c=cmap.mpl_colors[2])    
-        row4_axs[1].plot(r, chi_rad, c=cmap.mpl_colors[2])
-        row5_axs[1].plot(r_l, sim_lum/structures[i].structure['Luminosity'].max(), c=cmap.mpl_colors[2],)
+        row1_axs[1].plot(r/structures[i].structure['R_star'], rho,     c=cmap.mpl_colors[2], label='WP sim')    
+        row2_axs[1].plot(r/structures[i].structure['R_star'], N2,      c=cmap.mpl_colors[2])    
+        row3_axs[1].plot(r/structures[i].structure['R_star'], grad_s,  c=cmap.mpl_colors[2])    
+        row4_axs[1].plot(r/structures[i].structure['R_star'], chi_rad, c=cmap.mpl_colors[2])
+        row5_axs[1].plot(r_l/structures[i].structure['R_star'], sim_lum/structures[i].structure['Luminosity'].max(), c=cmap.mpl_colors[2],)
 
 
 for ax in [ax1_1, ax2_1, ax3_1]:
@@ -130,24 +132,24 @@ for ax in [ax1_3, ax2_3, ax3_3]:
 for ax in [ax1_4, ax2_4, ax3_4]:
     ax.set_ylim(1e5, 1e18)
     ax.set_yticks(( 1e6, 1e8, 1e10, 1e12, 1e14, 1e16 ))
-ax1_4.set_xticks((0, 5e10, 1e11))
-ax1_4.set_xticklabels(('0', r'$5 \times 10^{10}$', '$10^{11}$'))
-ax2_4.set_xticks((0, 1e11, 2e11, 3e11))
-ax2_4.set_xticklabels(('0', '$10^{11}$', r'$2 \times 10^{11}$', r'$3 \times 10^{11}$' ))
-ax3_4.set_xticks((0, 2e11, 4e11))
-ax3_4.set_xticklabels(('0', r'$2 \times 10^{11}$', r'$4 \times 10^{11}$' ))
+#ax1_4.set_xticks((0, 5e10, 1e11))
+#ax1_4.set_xticklabels(('0', r'$5 \times 10^{10}$', '$10^{11}$'))
+#ax2_4.set_xticks((0, 1e11, 2e11, 3e11))
+#ax2_4.set_xticklabels(('0', '$10^{11}$', r'$2 \times 10^{11}$', r'$3 \times 10^{11}$' ))
+#ax3_4.set_xticks((0, 2e11, 4e11))
+#ax3_4.set_xticklabels(('0', r'$2 \times 10^{11}$', r'$4 \times 10^{11}$' ))
 
 for ax in row5_axs:
     ax.set_ylim(0, 0.65)
-ax1_5.set_xlim(0, 2.5e10)
-ax1_5.set_xticks((0, 1e10, 2e10))
-ax1_5.set_xticklabels(('0', r'$10^{10}$', r'$2 \times 10^{10}$'))
-ax2_5.set_xlim(0, 1.2e11)
-ax2_5.set_xticks((0, 5e10, 1e11))
-ax2_5.set_xticklabels(('0', r'$5 \times 10^{10}$', r'$10^{11}$'))
-ax3_5.set_xlim(0, 2.5e11)
-ax3_5.set_xticks((0, 1e11, 2e11))
-ax3_5.set_xticklabels(('0', r'$10^{11}$', r'$2 \times 10^{11}$'))
+ax1_5.set_xlim(0, 2.5e10/(1.921*Rsun))
+#ax1_5.set_xticks((0, 1e10, 2e10))
+#ax1_5.set_xticklabels(('0', r'$10^{10}$', r'$2 \times 10^{10}$'))
+ax2_5.set_xlim(0, 1.2e11/(4.289*Rsun))
+#ax2_5.set_xticks((0, 5e10, 1e11))
+#ax2_5.set_xticklabels(('0', r'$5 \times 10^{10}$', r'$10^{11}$'))
+ax3_5.set_xlim(0, 2.5e11/(8.177*Rsun))
+#ax3_5.set_xticks((0, 1e11, 2e11))
+#ax3_5.set_xticklabels(('0', r'$10^{11}$', r'$2 \times 10^{11}$'))
 ax2_5.set_yticklabels(())
 ax3_5.set_yticklabels(())
 
@@ -155,7 +157,7 @@ for ax in axs[:-6]:
     ax.set_xticklabels(())
     ax.tick_params(axis="x",direction="in", which='both')
 for ax in axs[-6:]:
-    ax.set_xlabel('radius (cm)')
+    ax.set_xlabel('radius ($R_*$)')
 
 for i, ax in enumerate(axs):
     if i % 3 == 0: 

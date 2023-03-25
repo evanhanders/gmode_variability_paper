@@ -130,6 +130,9 @@ for i, sdir in enumerate(subdirs):
     for ell, axT, axB in zip([1,2], [ax1_1, ax1_2], [ax1_3, ax1_4]):
         kh = np.sqrt(ell*(ell+1))
         print('ell = {}'.format(ell))
+
+        if ell == 1:
+            axB.text(0.45, 0.86, r'$f^{-6.5}$', rotation=0, transform=axB.transAxes, ha='left', va='center')
         axT.loglog(freqs,  np.abs(lum[:, ells == ell]), color=color)
         axB.loglog(freqs,  np.abs(lum[:, ells == ell])/eval('Ma_cz*Lconv_cz', file_dict).value, color=color)
         if i == len(subdirs)-1:
@@ -145,6 +148,8 @@ for i, sdir in enumerate(subdirs):
             axB.set_ylabel(r'$L_w / (\mathscr{M} L_{\rm conv})$')
 
     for freq, axT, axB in zip([0.4, 0.8], [ax2_1, ax2_2], [ax2_3, ax2_4]):
+        if freq == 0.4:
+            axB.text(0.025, 0.45, r'$k_h^4=[\ell(\ell+1)]^2$', rotation=0, transform=axB.transAxes, ha='left', va='center')
         kh = np.sqrt(ells*(ells+1))
         print('f = {}'.format(freq))
         axT.loglog(ells,  lum[ freqs  > freq, :][0,:],    color=color)

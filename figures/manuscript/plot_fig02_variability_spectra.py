@@ -76,7 +76,7 @@ eig_dir = 'gyre_output'
 
 plt.figure()
 star_dirs = ['03msol_Zsolar', '40msol_Zsolar', '15msol_ZLMC']
-star_keys = ['3msol', '40msol', '15msol']
+star_keys = star_dirs
 Lmax = [15,15,15]
 
 signals = []
@@ -118,6 +118,7 @@ ax1 = fig.add_axes((0.00,  0, 0.27, 1))
 ax2 = fig.add_axes((0.33,  0, 0.27, 1))
 ax3 = fig.add_axes((0.73,  0, 0.27, 1))
 
+
 plt.subplots_adjust(hspace=0.5, wspace=0.7)
 
 
@@ -126,8 +127,8 @@ plt.subplots_adjust(hspace=0.5, wspace=0.7)
 #Read script: https://github.com/jieunchoi/MIST_codes/blob/master/scripts/read_mist_models.py
 zamsT = []
 zamsL = []
-for mass in ['00300', '00500', '01000', '02000', '04000']:
-    model = EEP('../../data/mist_models/{}M.track.eep'.format(mass), verbose=True)
+for mass_str in ['00300', '00500', '01000', '01500', '02000', '04000']:
+    model = EEP('../../data/mist_models/{}M.track.eep'.format(mass_str), verbose=True)
     mass = model.minit
     center_h1 = model.eeps['center_h1']
     good = (center_h1 < center_h1[0]*0.999)*(center_h1 > 0.02)
@@ -139,7 +140,10 @@ for mass in ['00300', '00500', '01000', '02000', '04000']:
     zamsL.append(ell[good][0])
     ax3.plot(log_Teff[good], ell[good], label=mass, c='grey', lw=1, zorder=0)
 #    ax3.text(0.01+log_Teff[good][0], -0.1+ell[good][0], '{:d}'.format(int(mass))+r'$M_{\odot}$', ha='right')
-    ax3.text(0.02+log_Teff[good][0], -0.1+ell[good][0], '{:d}'.format(int(mass)), ha='right', size=10, color='grey')
+    if mass_str == '01500':
+        ax3.text(0.03+log_Teff[good][0], -0.15+ell[good][0], '{:d}'.format(int(mass)), ha='right', size=10, color='grey')
+    else:
+        ax3.text(0.02+log_Teff[good][0], -0.1+ell[good][0], '{:d}'.format(int(mass)), ha='right', size=10, color='grey')
 
 #make colormap based on main sequence distance for stars
 #ax3.plot(zamsT, zamsL, c='grey', zorder=0, lw=1)
@@ -200,13 +204,14 @@ con1 = ConnectionPatch(xyA=(1e1,1e0), xyB=(4e-2,1e0), coordsA='data', coordsB='d
 ax1.add_artist(con1)
 ax1.plot([7e0,1e1],[1e0, 1e0], c='grey', lw=1)
 
-ax2.text(7e-2, 3.3e-1, r'40 $M_{\odot}$', color=cmap.mpl_colors[1], ha='center', va='center', size=8)
+ax1.text(0.12, 0.04, r'15 $M_{\odot}$', color=cmap.mpl_colors[2], ha='center', va='center', size=8)
+ax2.text(8e-2, 3.3e-1, r'40 $M_{\odot}$', color=cmap.mpl_colors[1], ha='center', va='center', size=8)
 ax2.text(8e-2, 1.1e-1, r'15 $M_{\odot}$', color=cmap.mpl_colors[2], ha='center', va='center', size=8)
 ax2.text(1.3e-1, 1.1e-2, r'3 $M_{\odot}$', color=cmap.mpl_colors[0], ha='center', va='center', size=8)
 ax2.set_ylim(5e-4, 1e0)
 ax2.set_xlabel(r'frequency (d$^{-1}$)')
 for ax in [ax1, ax2]:
-    ax.set_xlim(4e-2, 1e1)
+    ax.set_xlim(5e-2, 1e1)
 
 plt.savefig('fig02_obs_prediction.png', bbox_inches='tight', dpi=300)
 plt.savefig('fig02_obs_prediction.pdf', bbox_inches='tight', dpi=300)

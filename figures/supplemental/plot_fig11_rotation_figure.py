@@ -245,8 +245,9 @@ non_fiducial = np.logical_or(non_fiducial,i_LogL >= fiducial_ell + 0.2)
 
 
 #sizes = [2.6**i for i in LogL]  # Get unique values of i_LogL and compute corresponding marker sizes
-#fiducial  = (LogT > fiducial_T   - 0.2)*(LogT < fiducial_T + 0.2)
-#fiducial *= (LogL > fiducial_ell - 0.2)*(LogL < fiducial_ell + 0.2)
+full_fiducial  = (LogT > fiducial_T   - 0.2)*(LogT < fiducial_T + 0.2)
+full_fiducial *= (LogL > fiducial_ell - 0.2)*(LogL < fiducial_ell + 0.2)
+print('median', np.median(vsini[full_fiducial]))
 #
 #non_fiducial = np.logical_or(LogT <= fiducial_T   - 0.2, LogT >= fiducial_T + 0.2)
 #non_fiducial = np.logical_or(non_fiducial,LogL <= fiducial_ell - 0.2)
