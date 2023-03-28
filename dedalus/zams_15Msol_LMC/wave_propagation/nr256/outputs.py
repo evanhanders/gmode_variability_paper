@@ -20,20 +20,20 @@ for hname in ['slices', 'shells', 'scalars', 'profiles', 'checkpoint', 'wave_she
 #Equatorial slices
 eq_tasks = OrderedDict()
 eq_tasks['type'] = 'equator'
-eq_tasks['fields'] = ['s1', 'u']
+eq_tasks['fields'] = ['s1', 'u', 'pom_fluc']
 handlers['slices']['tasks'].append(eq_tasks)
 
 #Meridional slices
 mer_tasks = OrderedDict()
 mer_tasks['type'] = 'meridian'
-mer_tasks['fields'] = ['s1', 'u']
+mer_tasks['fields'] = ['s1', 'u', 'pom_fluc']
 mer_tasks['interps'] = [0, 0.5*pi, pi, 1.5*pi]
 handlers['slices']['tasks'].append(mer_tasks)
 
 #Shell slices
 shell_tasks = OrderedDict()
 shell_tasks['type'] = 'shell'
-shell_tasks['fields'] = ['s1', 'u']
+shell_tasks['fields'] = ['s1', 'u', 'pom_fluc']
 shell_tasks['interps'] = [0.5, 1, '0.75R', '0.95R', 'R']
 handlers['slices']['tasks'].append(shell_tasks)
 
