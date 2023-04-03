@@ -56,21 +56,6 @@ shift_factor = FsSound/FsTrue
 shifted = np.full_like(transfer_frequencies, shift_factor)
 shifted_frequencies = shifted*transfer_frequencies
 
-#Making the peaks less peaky
-max_height3 = 3e-14
-max_height15 = 3e-15
-max_height40 = 1e-15
-peaks3, _ = find_peaks(msol_3_transfer, height=max_height3)
-peaks15, _ = find_peaks(msol_15_transfer, height=max_height15)
-peaks40, _ = find_peaks(msol_40_transfer, height=max_height40)
-
-msol_3_transfer[peaks3] = max_height3
-for i in peaks3:
-    if transfer_frequencies[i]>1e-5:
-        msol_3_transfer[i] = 1e-14
-msol_15_transfer[peaks15] = max_height15
-msol_40_transfer[peaks40] = max_height40
-
 #Read in jupiter clip
 filename = 'Jupiter_Holst_Clip.wav'
 Fs, data = read(filename)
@@ -87,10 +72,11 @@ mask15 = interp(shifted_frequencies, frequ, msol_15_transfer)
 mask40 = interp(shifted_frequencies, frequ, msol_40_transfer)
 mask3 = interp(shifted_frequencies, frequ, msol_3_transfer)
 print("...Interpolation Finished")
+
 #apply mask to data and normalize
-filtered3 = filtereddata*mask3
-filtered15 = filtereddata*mask15
-filtered40 = filtereddata*mask40
+filtered3 = filtereddata*np.cbrt(mask3)
+filtered15 = filtereddata*np.cbrt(mask15)
+filtered40 = filtereddata*np.cbrt(mask40)
 
 #take back to time space
 filteredwrite3 = ifour(filtered3)
@@ -106,9 +92,9 @@ filteredwrite40 /= norm40
 filteredwrite3 /= norm3
 
 #write files
-write('J_in_40_msol.wav', Fs, filteredwrite40/1000)
-write('J_in_15_msol.wav', Fs, filteredwrite15/1000)
-write('J_in_3_msol.wav', Fs, filteredwrite3/1000)
+write('J_in_40_msol.wav', Fs, filteredwrite40)
+write('J_in_15_msol.wav', Fs, filteredwrite15)
+write('J_in_3_msol.wav', Fs, filteredwrite3/5)
 
 #Plotting
 m3c = '#1b9e77'
@@ -139,10 +125,10 @@ ax4.loglog(frequ, np.conj(filtered15)*filtered15/norm15, label='15 $M_\odot$', c
 ax6.loglog(frequ, np.conj(filtered40)*filtered40/norm40, label='40 $M_\odot$', color=m40c)
 ax6.set_xlabel('Frequency (Hz)')
 for ax, label in zip([ax2, ax4, ax6],['3 $M_\odot$','15 $M_\odot$','40 $M_\odot$']):
-    ax.set_ylim(1e-15,1)
+    #ax.set_ylim(1e-15,1)
     ax.text(0.98,0.9,label, ha='right',va='center',transform=ax.transAxes)
     ax.set_xlim(21,20000)
     ax.set_ylabel('Amplitude')
-    ax.set_yticks([1e-14,1e-10,1e-6,1e-2])
+    #ax.set_yticks([1e-14,1e-10,1e-6,1e-2])
 
 plt.savefig("gmodes_timeseries_PS.pdf",dpi = 400, bbox_inches="tight")
