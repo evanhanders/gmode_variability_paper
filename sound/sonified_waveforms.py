@@ -21,10 +21,14 @@ msol_3_amp[frequ<cutoff] = 0
 
 #shift to audible frequency ranges
 FsTrue = 1/1800
-FsSound = 15000
+FsSound = 45000
 shift_factor = FsSound/FsTrue
 shifted = np.full_like(frequ, shift_factor)
 shifted_frequencies = shifted*frequ
+
+msol_15_amp[shifted_frequencies<20] = 0
+msol_40_amp[shifted_frequencies<20] = 0
+msol_3_amp[shifted_frequencies<20] = 0
 
 #generate random power phases for each frequency
 phis = np.random.default_rng().uniform(0,2*np.pi,msol_15_amp.shape)
@@ -36,9 +40,9 @@ phase_3msol = msol_3_amp * (np.cos(phis) + 1j*np.sin(phis))
 base15 = ifft(phase_15msol)
 base40 = ifft(phase_40msol)
 base3 = ifft(phase_3msol)
-music15 = np.concatenate((base15,base15,base15,base15))
-music40 = np.concatenate((base40,base40,base40,base40))
-music3 = np.concatenate((base3,base3,base3,base3))
+music15 = np.tile(base15,4)
+music40 = np.tile(base40,4)
+music3 = np.tile(base3,4)
 
 #normalization
 norm15 = np.abs(music15).max()
