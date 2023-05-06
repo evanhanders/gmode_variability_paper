@@ -11,11 +11,12 @@ from pathlib import Path
 from scipy.interpolate import interp1d
 from configparser import ConfigParser
 
-import d3_stars
+import compstar
 from compstar.defaults import config
 from compstar.dedalus.parser import name_star
 from compstar.dedalus.star_builder import find_core_cz_radius
-from compstar.dedalus.evp_functions import calculate_refined_transfer, SBDF2_gamma_eff
+from compstar.dedalus.evp_functions import SBDF2_gamma_eff
+from compstar.waves.transfer import calculate_refined_transfer
 
 plot = False
 
@@ -49,7 +50,7 @@ if __name__ == '__main__':
 
 
     # Generalized logic for getting forcing radius.
-    package_path = Path(d3_stars.__file__).resolve().parent
+    package_path = Path(compstar.__file__).resolve().parent
     stock_path = package_path.joinpath('stock_models')
     if os.path.exists(config.star['path']):
         mesa_file_path = config.star['path']

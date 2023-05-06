@@ -28,5 +28,5 @@ if __name__ == '__main__':
         eigenvalues.solve(ell)
         eigenvalues.check_eigen()
         eigenvalues.output()
-        eigenvalues.get_duals(max_cond=1e10, ell=ell)
+        eigenvalues.get_duals(max_cond=1e10, ell=ell, cleanup=True)
         logger.info('solved EVP for ell = {}'.format(ell))
