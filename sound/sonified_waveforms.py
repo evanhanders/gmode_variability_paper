@@ -5,13 +5,18 @@ import h5py
 from scipy.io.wavfile import read, write
 from IPython.display import Audio
 
+plt.rcParams['font.family'] = ['Times New Roman']
+plt.rcParams['mathtext.fontset'] = 'dejavusans'
+plt.rcParams['mathtext.fontset'] = 'cm'
+plt.rcParams['mathtext.rm'] = 'serif'
+
 #read in h5 file
 filename = 'magnitude_spectra.h5'
 h5 = h5py.File(filename,'r')
 frequ = h5['frequencies'][()]
-msol_15_amp = h5['15msol_magnitude_sum'][()]
-msol_3_amp = h5['3msol_magnitude_sum'][()]
-msol_40_amp = h5['40msol_magnitude_sum'][()]
+msol_15_amp = h5['15msol_ZLMC_magnitude_sum'][()]
+msol_3_amp = h5['03msol_Zsolar_magnitude_sum'][()]
+msol_40_amp = h5['40msol_Zsolar_magnitude_sum'][()]
 
 #cutoff low frequency noise which can dominate
 cutoff = 1e-7
@@ -40,9 +45,9 @@ phase_3msol = msol_3_amp * (np.cos(phis) + 1j*np.sin(phis))
 base15 = ifft(phase_15msol)
 base40 = ifft(phase_40msol)
 base3 = ifft(phase_3msol)
-music15 = np.tile(base15,4)
-music40 = np.tile(base40,4)
-music3 = np.tile(base3,4)
+music15 = np.tile(base15,40)
+music40 = np.tile(base40,40)
+music3 = np.tile(base3,40)
 
 #normalization
 norm15 = np.abs(music15).max()
@@ -56,9 +61,9 @@ msol_15_amp /= norm15
 msol_3_amp /= norm3
 
 #write files
-write("sonified_3msol.wav", FsSound, music3.real)
-write("sonified_15msol.wav", FsSound, music15.real)
-write("sonified_40msol.wav", FsSound, music40.real)
+write("sonified_3msol.wav", FsSound, music3.real/35)
+write("sonified_15msol.wav", FsSound, music15.real/16)
+write("sonified_40msol.wav", FsSound, music40.real/8)
 
 #Plot timeseries data and power spectrum
 m3c = '#1b9e77'

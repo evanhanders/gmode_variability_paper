@@ -7,6 +7,15 @@ from IPython.display import Audio
 from numpy.fft import rfft, irfft, rfftfreq
 from scipy.signal import find_peaks
 
+plt.rcParams['font.family'] = ['Times New Roman']
+plt.rcParams['mathtext.fontset'] = 'dejavusans'
+plt.rcParams['mathtext.fontset'] = 'cm'
+plt.rcParams['mathtext.rm'] = 'serif'
+
+m3c = '#1b9e77'
+m15c = '#7570b3'
+m40c = '#d95f02'
+
 #defining fourier stuff
 #fft
 def four(data):
@@ -43,9 +52,9 @@ def interp(transfer_freq, frequ, transfer):
 #read in h5 file to get stellar transfer functions
 filename = 'magnitude_spectra.h5'
 h5 = h5py.File(filename,'r')
-msol_15_transfer = h5['15msol_transfer_cube'][()][0]
-msol_40_transfer = h5['40msol_transfer_cube'][()][0]
-msol_3_transfer = h5['3msol_transfer_cube'][()][0]
+msol_15_transfer = h5['15msol_ZLMC_transfer_cube'][()][0]
+msol_40_transfer = h5['40msol_Zsolar_transfer_cube'][()][0]
+msol_3_transfer = h5['03msol_Zsolar_transfer_cube'][()][0]
 transfer_frequencies = h5['frequencies'][()]
 h5.close()
 
@@ -73,6 +82,16 @@ mask40 = interp(shifted_frequencies, frequ, msol_40_transfer)
 mask3 = interp(shifted_frequencies, frequ, msol_3_transfer)
 print("...Interpolation Finished")
 
+fig = plt.figure(figsize=(7.5,4.0))
+plt.loglog(frequ, np.cbrt(mask3),  label='Mass={}'.format(3), color=m3c)
+plt.loglog(frequ, np.cbrt(mask15),  label='Mass={}'.format(15), color=m15c)
+plt.loglog(frequ, np.cbrt(mask40),  label='Mass={}'.format(40), color=m40c)
+plt.legend(loc='upper left')
+plt.xlim(20,20000)
+plt.xlabel("Frequency (Hz)")
+plt.ylabel("Amplitude")
+plt.savefig("transfer_funcs.pdf")
+
 #apply mask to data and normalize
 filtered3 = filtereddata*np.cbrt(mask3)
 filtered15 = filtereddata*np.cbrt(mask15)
@@ -92,14 +111,11 @@ filteredwrite40 /= norm40
 filteredwrite3 /= norm3
 
 #write files
-write('J_in_40_msol.wav', Fs, filteredwrite40)
-write('J_in_15_msol.wav', Fs, filteredwrite15)
-write('J_in_3_msol.wav', Fs, filteredwrite3/5)
+write('J_in_40_msol.wav', Fs, filteredwrite40/4)
+write('J_in_15_msol.wav', Fs, filteredwrite15/4)
+write('J_in_3_msol.wav', Fs, filteredwrite3/18)
 
 #Plotting
-m3c = '#1b9e77'
-m15c = '#7570b3'
-m40c = '#d95f02'
 fig = plt.figure(figsize=(7.5,4.0))
 ax2 = fig.add_axes([0.55,0.67,0.45,.33])
 ax1 = fig.add_axes([0,0.67,0.45,.33])
