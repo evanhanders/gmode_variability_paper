@@ -135,9 +135,9 @@ Lmax = [15, 15]
 out_f = h5py.File(output_file, 'r')
 freqs = out_f['frequencies'][()] * 24 * 60 * 60
 
-alpha = 0.4e0 
-alpha_latex = '0.4 $\mu$mag'
-nu_char = 0.16
+alpha = 0.21e0 
+alpha_latex = '0.21 $\mu$mag'
+nu_char = 0.22
 gamma = 3.9
 
 for i, sdir in enumerate(star_dirs):

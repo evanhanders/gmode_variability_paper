@@ -15,14 +15,10 @@ plt.rcParams['mathtext.rm'] = 'serif'
 
 wave_lum = lambda f, ell: (2.33e-11)*f**(-6.5)*np.sqrt(ell*(ell+1))**4 #f in Hz.
 correction = 0.4
-min_freqs = [0.17, 0.22, 0.3, 0.35, 0.4, 0.45] #invday
 
 root_dir = '../../data/'
 output_file = '{}/dedalus/surface_signals/wave_propagation_power_spectra.h5'.format(root_dir)
-with h5py.File('../../dedalus/zams_15Msol_LMC/wave_generation/re10000/star/star_512+192_bounds0-2L_Re3.00e+04_de1.5_cutoff1.0e-10.h5', 'r') as lumf:
-    s_nd = lumf['s_nd'][()]
-
-with h5py.File('../../dedalus/zams_15Msol_LMC/wave_propagation/nr256/star/star_256+192+64_bounds0-0.93R_Re1.00e+04_de1.5_cutoff1.0e-10.h5', 'r') as starf:
+with h5py.File('../../dedalus/zams_15Msol_LMC/wave_propagation/nr128/star/star_128+192+64_bounds0-0.93R_Re4.00e+03_de1.5_cutoff1.0e-10.h5', 'r') as starf:
     s_nd = starf['s_nd'][()]
     L_nd = starf['L_nd'][()]
     m_nd = starf['m_nd'][()]
@@ -31,7 +27,7 @@ with h5py.File('../../dedalus/zams_15Msol_LMC/wave_propagation/nr256/star/star_2
     lum_nd = energy_nd/tau_nd
 
 wave_lums_data = dict()
-with h5py.File('../../data/dedalus/wave_fluxes/zams_15Msol_LMC/re03200/wave_luminosities.h5', 'r') as lum_file:
+with h5py.File('../../data/dedalus/wave_fluxes/zams_15Msol_LMC/re01200/wave_luminosities.h5', 'r') as lum_file:
     radius_str = '1.25'
     wave_lums_data['freqs'] = lum_file['cgs_freqs'][()]
     wave_lums_data['ells'] = lum_file['ells'][()].ravel()
@@ -65,17 +61,14 @@ for use_fit in [False, True]:
                 transfer_freq_hz = ef['om'][()]/(2*np.pi) / tau_nd #Hz
                 transfer_freq = transfer_freq_hz * (24 * 60 * 60) #invday
                 transfer_interp = lambda f: 10**interp1d(np.log10(transfer_freq_hz), np.log10(transfer_func_root_lum), bounds_error=False, fill_value=-1e99)(np.log10(f))
-                bad = transfer_freq < min_freqs[j-1]
 
             if use_fit:
                 surface_s1_amplitude = correction*np.abs(transfer_interp(transfer_freq_hz))*np.sqrt(wave_lum(transfer_freq_hz, j))
-                surface_s1_amplitude[bad] = 0 #set low freq to 0
                 axs[j-1].loglog(transfer_freq, surface_s1_amplitude, c='orange', label='transfer solution (Eqn. 74 $L_w$)', lw=0.5)
             else:
                 log_wave_lum = interp1d(np.log10(wave_lums_data['freqs']), np.log10(wave_lums_data['lum'][:,j == wave_lums_data['ells']].ravel()))
                 data_wave_lum = lambda f: 10**(log_wave_lum(np.log10(f)))
                 surface_s1_amplitude = correction*np.abs(transfer_interp(transfer_freq_hz))*np.sqrt(data_wave_lum(transfer_freq_hz))
-                surface_s1_amplitude[bad] = 0 #set low freq to 0
                 axs[j-1].loglog(transfer_freq, surface_s1_amplitude, c='orange', label='transfer solution (measured $L_w$)', lw=0.5)
             axs[j-1].text(0.96, 0.92, r'$\ell =$ ' + '{}'.format(j), transform=axs[j-1].transAxes, ha='right', va='center')
 
@@ -100,9 +93,9 @@ for use_fit in [False, True]:
 
         ax1.legend(loc='lower left', frameon=False, borderaxespad=0.1, handletextpad=0.2, fontsize=8)
         if use_fit:
-            plt.savefig('fig07_wavepropagation_transferVerification_fit.png', bbox_inches='tight', dpi=300)
-            plt.savefig('fig07_wavepropagation_transferVerification_fit.pdf', bbox_inches='tight', dpi=300)
+            plt.savefig('alt_fig07_wavepropagation_transferVerification_fit.png', bbox_inches='tight', dpi=300)
+            plt.savefig('alt_fig07_wavepropagation_transferVerification_fit.pdf', bbox_inches='tight', dpi=300)
         else:
-            plt.savefig('fig06_wavepropagation_transferVerification_raw.png', bbox_inches='tight', dpi=300)
-            plt.savefig('fig06_wavepropagation_transferVerification_raw.pdf', bbox_inches='tight', dpi=300)
+            plt.savefig('alt_fig06_wavepropagation_transferVerification_raw.png', bbox_inches='tight', dpi=300)
+            plt.savefig('alt_fig06_wavepropagation_transferVerification_raw.pdf', bbox_inches='tight', dpi=300)
         plt.clf()

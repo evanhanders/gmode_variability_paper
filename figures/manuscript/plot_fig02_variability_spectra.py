@@ -176,7 +176,7 @@ ax3.set_ylabel(r'$\log_{10}\, \mathscr{L} / \mathscr{L}_\odot$')
 ax3.set_xlabel(r'$\log_{10}\, $T$_{\rm eff}/$K')
 
 plt.axes(ax1)
-ax1.text(0.06, 1.5e-1, 'Predicted wave signal $(15 M_{\odot})$', ha='left', color=cmap.mpl_colors[2])
+ax1.text(0.063, 1e-1, 'Predicted wave signal $(15 M_{\odot})$', ha='left', color=cmap.mpl_colors[2])
 ax1.text(0.25, 3.5e2, 'Observed red noise', ha='left', va='center', color=cmap.mpl_colors[3])
 
 for i in range(len(LogL)):
@@ -200,18 +200,18 @@ for i in range(3):
 
 #con2 = ConnectionPatch(xyA=(1e1,1e-4), xyB=(4e-2,1e-4), coordsA='data', coordsB='data', axesA=ax1, axesB=ax2, color='grey', lw=0.5)
 #ax1.add_artist(con2)
-con1 = ConnectionPatch(xyA=(1e1,1e0), xyB=(5e-2,1e0), coordsA='data', coordsB='data', axesA=ax1, axesB=ax2, color='grey', lw=1)
+con1 = ConnectionPatch(xyA=(1e1,2e-1), xyB=(6e-2,2e-1), coordsA='data', coordsB='data', axesA=ax1, axesB=ax2, color='grey', lw=1)
 ax1.add_artist(con1)
-ax1.plot([7e0,1e1],[1e0, 1e0], c='grey', lw=1)
+ax1.plot([7e0,1e1],[2e-1, 2e-1], c='grey', lw=1)
 
 #ax1.text(0.12, 0.04, r'15 $M_{\odot}$', color=cmap.mpl_colors[2], ha='center', va='center', size=8)
-ax2.text(8e-2, 3.3e-1, r'40 $M_{\odot}$', color=cmap.mpl_colors[1], ha='center', va='center', size=8)
-ax2.text(8e-2, 1.1e-1, r'15 $M_{\odot}$', color=cmap.mpl_colors[2], ha='center', va='center', size=8)
-ax2.text(1.3e-1, 1.1e-2, r'3 $M_{\odot}$', color=cmap.mpl_colors[0], ha='center', va='center', size=8)
-ax2.set_ylim(5e-4, 1e0)
+ax2.text(6.3e-2, 1.7e-1, r'40 $M_{\odot}$', color=cmap.mpl_colors[1], ha='left', va='center', size=8)
+ax2.text(6.5e-2, 7e-2, r'15 $M_{\odot}$', color=cmap.mpl_colors[2], ha='left', va='center', size=8)
+ax2.text(1.3e-1, 6e-3, r'3 $M_{\odot}$', color=cmap.mpl_colors[0], ha='center', va='center', size=8)
+ax2.set_ylim(5e-4, 2e-1)
 ax2.set_xlabel(r'frequency (d$^{-1}$)')
 for ax in [ax1, ax2]:
-    ax.set_xlim(5e-2, 1e1)
+    ax.set_xlim(6e-2, 1e1)
 
 plt.savefig('fig02_obs_prediction.png', bbox_inches='tight', dpi=300)
 plt.savefig('fig02_obs_prediction.pdf', bbox_inches='tight', dpi=300)

@@ -21,11 +21,11 @@ def red_noise(nu, alpha0, nu_char, gamma=2):
 
 star_dirs = ['03msol_Zsolar', '15msol_ZLMC', '40msol_Zsolar']
 Lmax = [15, 15, 15]
-alpha0 = [9e-3, 1.2e-1, 3e-1]
-alpha_latex = [ r'$9 \times 10^{-3}$ $\mu$mag',\
-                r'$0.12$ $\mu$mag',\
-                r'$0.3$ $\mu$mag']
-nu_char = [2.6e-1, 0.16, 0.105]
+alpha0 = [5.5e-3, 6e-2, 1.6e-1]
+alpha_latex = [ r'$5.5 \times 10^{-3}$ $\mu$mag',\
+                r'$6 \times 10^{-2}$ $\mu$mag',\
+                r'$0.16$ $\mu$mag']
+nu_char = [3e-1, 0.22, 0.13]
 gamma  = [4.5, 3.9, 4.3]
 out_f = h5py.File(output_file, 'r')
 freqs = out_f['frequencies'][()]*24*60*60
@@ -35,6 +35,9 @@ fig = plt.figure(figsize=(7.5, 2.5))
 ax1 = fig.add_axes([0.050, 0.025, 0.275, 0.95])
 ax2 = fig.add_axes([0.375, 0.025, 0.275, 0.95])
 ax3 = fig.add_axes([0.700, 0.025, 0.275, 0.95])
+ax1.text(0.98, 0.98, '3 $M_{\odot}$', ha='right', va='top', transform=ax1.transAxes)
+ax2.text(0.98, 0.98, '15 $M_{\odot}$', ha='right', va='top', transform=ax2.transAxes)
+ax3.text(0.98, 0.98, '40 $M_{\odot}$', ha='right', va='top', transform=ax3.transAxes)
 axs = [ax1, ax2, ax3]
 
 for i, sdir in enumerate(star_dirs):

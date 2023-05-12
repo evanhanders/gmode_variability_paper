@@ -19,8 +19,6 @@ from compstar.dedalus.evp_functions import SBDF2_gamma_eff
 from compstar.waves.transfer import calculate_refined_transfer
 
 plot = False
-forcing_width = 0.1
-forcing_center = 1.1
 
 #Grab relevant information about the simulation stratification.
 out_dir, out_file = name_star()
@@ -63,8 +61,8 @@ if __name__ == '__main__':
         else:
             raise ValueError("Cannot find MESA profile file in {} or {}".format(config.star['path'], stock_file_path))
     core_cz_radius = find_core_cz_radius(mesa_file_path)
-    min_forcing_radius = forcing_center - forcing_width / 2
-    max_forcing_radius = forcing_center + forcing_width / 2
+    min_forcing_radius = 1.005
+    max_forcing_radius = 1.20 
     N2_force_max = N2(max_forcing_radius)
     N2_max = N2s.max()
 #    N2_adjust = np.sqrt(N2_max/N2_force_max)

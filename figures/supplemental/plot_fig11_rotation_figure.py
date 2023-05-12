@@ -356,8 +356,8 @@ ax2.plot([3e0, 3e0], [4e0, 8e0], color='grey', alpha=0.5)
 
 #Fiducial rotating star
 from palettable.colorbrewer.qualitative import Dark2_5 as cmap
-ax3.scatter(21.7, 0.4, c=sm2.to_rgba(fiducial_T), marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
-ax4.scatter(fiducial_Rop, 0.4, c=sm2.to_rgba(fiducial_T), marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
+ax3.scatter(21.7, 0.17, c=sm2.to_rgba(fiducial_T), marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
+ax4.scatter(fiducial_Rop, 0.17, c=sm2.to_rgba(fiducial_T), marker='*', edgecolors='k', linewidth=1, s=200, zorder=100)
 
 plt.savefig("fig11_rednoise_Ro.pdf",bbox_inches='tight', dpi=300)
 plt.savefig("fig11_rednoise_Ro.png",bbox_inches='tight', dpi=300)

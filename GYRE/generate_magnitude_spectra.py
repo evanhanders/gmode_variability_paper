@@ -12,6 +12,7 @@ eig_dir = 'gyre_output'
 output_file = 'magnitude_spectra.h5'
 
 star_dirs = ['03msol_Zsolar', '40msol_Zsolar', '15msol_ZLMC', '15msol_ZLMC']
+amp_corr = 2/5
 luminosity_amplitudes = [7.34e-15, 5.3e-10, 2.33e-11, 3.004e-10]
 min_trustworthy = np.array([3e-2, 3e-2, 3e-2, 3e-2])/(24*60*60) #1/d -> Hz
 Lmax = 15
@@ -29,7 +30,7 @@ signals = []
 specLums = []
 logTeffs = []
 for i, sdir in enumerate(star_dirs):
-    wave_luminosity = lambda f, l: luminosity_amplitudes[i]*f**(-6.5)*np.sqrt(l*(l+1))**4
+    wave_luminosity = lambda f, l: (amp_corr**2)*luminosity_amplitudes[i]*f**(-6.5)*np.sqrt(l*(l+1))**4
     transfer_oms = []
     transfer_signal = []
     pure_transfers  = []
