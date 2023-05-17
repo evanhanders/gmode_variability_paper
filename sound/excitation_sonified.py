@@ -1,3 +1,4 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy.fft import fft, ifft, fftfreq
@@ -75,7 +76,7 @@ for ax, label in zip([ax2, ax4, ax6],['3 $M_\odot$','15 $M_\odot$','40 $M_\odot$
     ax.set_ylim(1e-12,6e3)
     ax.text(0.98,0.9,label, ha='right',va='center',transform=ax.transAxes)
     ax.set_xlim(21,20000)
-    ax.set_ylabel('Amplitude')
+    ax.set_ylabel('Power')
     ax.set_yticks([1e-10,1e-6,1e-2,1e2])
 
 plt.savefig("excitation_ts.pdf",dpi = 400, bbox_inches="tight")

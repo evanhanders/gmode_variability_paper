@@ -9,7 +9,6 @@ from multiprocessing import Process
 from IPython.display import Audio
 from numpy.fft import rfft, irfft, rfftfreq
 from moviepy.editor import *
-from moviepy.video.io.bindings import mplfig_to_npimage
 import h5py
 
 plt.rcParams['font.family'] = ['Times New Roman']
@@ -78,7 +77,7 @@ for ax, label in zip([ax2, ax4, ax6],['3 $M_\odot$','15 $M_\odot$','40 $M_\odot$
     ax.set_ylim(1e-3,1e9)
     ax.text(0.98,0.9,label, ha='right',va='center',transform=ax.transAxes)
     ax.set_xlim(21,20000)
-    ax.set_ylabel('Amplitude')
+    ax.set_ylabel('Power')
     ax.set_yticks([1e-1,1e2,1e5,1e8])
 
 plt.savefig("original_waveform.pdf",dpi = 400, bbox_inches="tight")

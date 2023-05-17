@@ -83,13 +83,13 @@ mask3 = interp(shifted_frequencies, frequ, msol_3_transfer)
 print("...Interpolation Finished")
 
 fig = plt.figure(figsize=(7.5,4.0))
-plt.loglog(frequ, np.cbrt(mask3),  label='Mass={}'.format(3), color=m3c)
-plt.loglog(frequ, np.cbrt(mask15),  label='Mass={}'.format(15), color=m15c)
-plt.loglog(frequ, np.cbrt(mask40),  label='Mass={}'.format(40), color=m40c)
+plt.loglog(frequ, np.cbrt(mask3),  label='{} $M_\odot$'.format(3), color=m3c)
+plt.loglog(frequ, np.cbrt(mask15),  label='{} $M_\odot$'.format(15), color=m15c)
+plt.loglog(frequ, np.cbrt(mask40),  label='{} $M_\odot$'.format(40), color=m40c)
 plt.legend(loc='upper left')
 plt.xlim(20,20000)
 plt.xlabel("Frequency (Hz)")
-plt.ylabel("Amplitude")
+plt.ylabel("Transfer$^{1/3}$")
 plt.savefig("transfer_funcs.pdf")
 
 #apply mask to data and normalize
@@ -144,7 +144,7 @@ for ax, label in zip([ax2, ax4, ax6],['3 $M_\odot$','15 $M_\odot$','40 $M_\odot$
     #ax.set_ylim(1e-15,1)
     ax.text(0.98,0.9,label, ha='right',va='center',transform=ax.transAxes)
     ax.set_xlim(21,20000)
-    ax.set_ylabel('Amplitude')
+    ax.set_ylabel('Power')
     #ax.set_yticks([1e-14,1e-10,1e-6,1e-2])
 
 plt.savefig("gmodes_timeseries_PS.pdf",dpi = 400, bbox_inches="tight")
