@@ -80,14 +80,29 @@ norm_filtered = norm(filtered, filtereddata, Fs)
 
 #Plot normalized power spectrum
 plt.clf()
-plt.loglog(frequ, np.conj(norm_filtered)*norm_filtered, label='masked', color=green2)
-plt.loglog(frequ, np.conj(filtereddata)*filtereddata,label='original', color=purple2)
-plt.legend()
-#plt.ylim(1e-9,1e15)
-plt.xlim(audible[0],audible[-1])
-plt.xlabel("frequency (Hz)")
-plt.ylabel("Power")
-plt.savefig("powerspectrum{}.pdf".format(dampinglevel))
+plt.rcParams['font.family'] = ['Times New Roman']
+plt.rcParams['mathtext.fontset'] = 'dejavusans'
+plt.rcParams['mathtext.fontset'] = 'cm'
+plt.rcParams['mathtext.rm'] = 'serif'
+
+fig = plt.figure(figsize=(7.5,4.0))
+ax2 = fig.add_axes([0.55,0,0.45,1])
+ax1 = fig.add_axes([0,0,0.45,1])
+ax1.loglog(frequ, mask, color=green1)
+ax1.set_xlabel("frequency (Hz)")
+ax1.set_ylabel("Transfer")
+ax2.loglog(frequ, np.conj(filtereddata)*filtereddata,label='original', color=purple2)
+ax2.loglog(frequ, np.conj(norm_filtered)*norm_filtered, label='filtered', color=green2)
+
+ax2.legend()
+ax1.set_xlim(audible[0],audible[-1])
+
+ax2.set_xlim(audible[0],audible[-1])
+ax2.set_ylim(1e-1,1e18)
+ax2.set_xlabel("frequency (Hz)")
+ax2.set_ylabel("Power")
+plt.tight_layout()
+plt.savefig("Transfer_and_PowerSpectrum.pdf", dpi = 400, bbox_inches="tight")
 
 #take back to time space
 filteredwrite = ifour(norm_filtered)

@@ -10,7 +10,7 @@ plt.rcParams['mathtext.fontset'] = 'dejavusans'
 plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['mathtext.rm'] = 'serif'
 
-#read in h5 file
+#read in h5 file (TODO Evan Update file name)
 filename = 'magnitude_spectra.h5'
 h5 = h5py.File(filename,'r')
 frequ = h5['frequencies'][()]

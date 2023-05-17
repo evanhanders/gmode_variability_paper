@@ -11,7 +11,7 @@ plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['mathtext.rm'] = 'serif'
 
 def sonify(mass):
-    filename = 'wave_luminosities_{}.h5'.format(mass)
+    filename = 'wave_luminosities_{}.h5'.format(mass) #TODO evan add filename structure
     h5 = h5py.File(filename,'r')
     luminosity = h5['cgs_wave_luminosity(r=1.25)']
     luminosity= np.sum(luminosity, axis=2)

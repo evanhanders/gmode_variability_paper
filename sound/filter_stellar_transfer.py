@@ -49,7 +49,7 @@ def interp(transfer_freq, frequ, transfer):
     return mask
 
 
-#read in h5 file to get stellar transfer functions
+#read in h5 file to get stellar transfer functions TODO evan add filename
 filename = 'magnitude_spectra.h5'
 h5 = h5py.File(filename,'r')
 msol_15_transfer = h5['15msol_ZLMC_transfer_cube'][()][0]
