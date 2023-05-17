@@ -26,7 +26,7 @@ numerics['L_dealias'] = 1.5
 
 ### Eigenvalue solve choices
 eigenvalue = OrderedDict()
-eigenvalue['Lmax'] = 16 #highest spherical harmonic degree to solve EVP at
+eigenvalue['Lmax'] = 10 #highest spherical harmonic degree to solve EVP at
 eigenvalue['hires_factor'] = 1.5 #Factor by which to increase the radial resolution for the hi-res EVP solve
 eigenvalue['radial_scale'] = 1 #multiplicative radial resolution scale
 

@@ -13,8 +13,8 @@ sLum_sun=(5777)**4.0/(274*100)
 #Get simulation details.
 star_dirs = ['03msol_Zsolar', '40msol_Zsolar', '15msol_ZLMC']
 sim_mass = [3, 40, 15]
-sim_alpha = [9e-3, 0.3, 0.12]
-sim_nuchar = [0.26, 0.1, 0.16]
+sim_alpha = [5.5e-3, 0.16, 0.06]
+sim_nuchar = [0.3, 0.13, 0.22]
 sim_specLums = []
 sim_logTeffs = []
 for i, sdir in enumerate(star_dirs):

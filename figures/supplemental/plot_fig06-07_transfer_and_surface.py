@@ -14,7 +14,8 @@ plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['mathtext.rm'] = 'serif'
 
 wave_lum = lambda f, ell: (2.33e-11)*f**(-6.5)*np.sqrt(ell*(ell+1))**4 #f in Hz.
-fudge = 1
+correction = 0.4
+min_freqs = [0.17, 0.22, 0.3, 0.35, 0.4, 0.45] #invday
 
 root_dir = '../../data/'
 output_file = '{}/dedalus/surface_signals/wave_propagation_power_spectra.h5'.format(root_dir)
@@ -64,14 +65,17 @@ for use_fit in [False, True]:
                 transfer_freq_hz = ef['om'][()]/(2*np.pi) / tau_nd #Hz
                 transfer_freq = transfer_freq_hz * (24 * 60 * 60) #invday
                 transfer_interp = lambda f: 10**interp1d(np.log10(transfer_freq_hz), np.log10(transfer_func_root_lum), bounds_error=False, fill_value=-1e99)(np.log10(f))
+                bad = transfer_freq < min_freqs[j-1]
 
             if use_fit:
-                surface_s1_amplitude = fudge*np.abs(transfer_interp(transfer_freq_hz))*np.sqrt(wave_lum(transfer_freq_hz, j))
+                surface_s1_amplitude = correction*np.abs(transfer_interp(transfer_freq_hz))*np.sqrt(wave_lum(transfer_freq_hz, j))
+                surface_s1_amplitude[bad] = 0 #set low freq to 0
                 axs[j-1].loglog(transfer_freq, surface_s1_amplitude, c='orange', label='transfer solution (Eqn. 74 $L_w$)', lw=0.5)
             else:
                 log_wave_lum = interp1d(np.log10(wave_lums_data['freqs']), np.log10(wave_lums_data['lum'][:,j == wave_lums_data['ells']].ravel()))
                 data_wave_lum = lambda f: 10**(log_wave_lum(np.log10(f)))
-                surface_s1_amplitude = fudge*np.abs(transfer_interp(transfer_freq_hz))*np.sqrt(data_wave_lum(transfer_freq_hz))
+                surface_s1_amplitude = correction*np.abs(transfer_interp(transfer_freq_hz))*np.sqrt(data_wave_lum(transfer_freq_hz))
+                surface_s1_amplitude[bad] = 0 #set low freq to 0
                 axs[j-1].loglog(transfer_freq, surface_s1_amplitude, c='orange', label='transfer solution (measured $L_w$)', lw=0.5)
             axs[j-1].text(0.96, 0.92, r'$\ell =$ ' + '{}'.format(j), transform=axs[j-1].transAxes, ha='right', va='center')
 

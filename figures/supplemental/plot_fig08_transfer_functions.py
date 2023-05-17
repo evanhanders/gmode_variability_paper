@@ -80,8 +80,8 @@ for row in ax_rows[:2]:
 for ax in ax_rows[-1]:
     ax.set_xlabel('$f$ (d$^{-1}$)')
 
-ax2_3.text(0.25, 0.1, 'star', ha='left',   va='center', transform=ax2_3.transAxes)
-ax2_3.text(0.25, 0.6, 'WP sim', ha='left', va='center',  c='orange', transform=ax2_3.transAxes)
+ax2_3.text(0.25, 0.2, 'star', ha='left',   va='center', transform=ax2_3.transAxes)
+ax2_3.text(0.25, 0.65, 'WP sim', ha='left', va='center',  c='orange', transform=ax2_3.transAxes)
 
 
 plt.savefig('fig08_transfer_functions.png', bbox_inches='tight', dpi=300)

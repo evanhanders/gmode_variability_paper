@@ -61,11 +61,11 @@ if __name__ == '__main__':
         else:
             raise ValueError("Cannot find MESA profile file in {} or {}".format(config.star['path'], stock_file_path))
     core_cz_radius = find_core_cz_radius(mesa_file_path)
-    min_forcing_radius = 0.97 * core_cz_radius / L_nd
-    max_forcing_radius = 1.03 * core_cz_radius / L_nd
+    min_forcing_radius = 1.005
+    max_forcing_radius = 1.20 
     N2_force_max = N2(max_forcing_radius)
     N2_max = N2s.max()
-    N2_adjust = np.sqrt(N2_max/N2_force_max)
+#    N2_adjust = np.sqrt(N2_max/N2_force_max)
 #    min_forcing_radius = 0.5 * core_cz_radius / L_nd
 #    max_forcing_radius = 1.04 * core_cz_radius / L_nd
 
@@ -85,7 +85,6 @@ if __name__ == '__main__':
             values = raw_values = f['good_evalues'][()]
             s1_amplitudes = f['s1_amplitudes'][()].squeeze()
             depths = f['depths'][()]
-            discard = int(f['discard'][()]) #number of modes to discard
             tau_nd = f['tau_nd'][()]
 
             eff_evalues = []
@@ -97,7 +96,7 @@ if __name__ == '__main__':
                 else:
                     eff_evalues.append(omega_eff - 1j*gamma_eff)
             values = np.array(eff_evalues)
-            print('effective modes in Hz: {}'.format(values/tau_nd))
+#            print('effective modes in Hz: {}'.format(values/tau_nd))
 
 
             rs = []
@@ -107,16 +106,10 @@ if __name__ == '__main__':
             smooth_oms = f['smooth_oms'][()]
             smooth_depths = f['smooth_depths'][()]
             depthfunc = interp1d(smooth_oms, smooth_depths, bounds_error=False, fill_value='extrapolate')
-        print(depths)
+#        print(depths)
 
         #Construct frequency grid for evaluation
         om0 = values.real[-1]#np.min(np.abs(values.real))*1
-        if discard == 0:
-            om0 = values.real[-1]#np.min(np.abs(values.real))*1
-        else:
-            om0 = values.real[-discard]#np.min(np.abs(values.real))*1
-#        discard = values.size-np.sum(depths < 1e-2)
-        discard = 0#values.size-np.sum(depths < 1e-2)
         om1 = np.max(values.real)*1.25
         print(om0, om1)
 
@@ -129,18 +122,18 @@ if __name__ == '__main__':
         uh_dual_interp = interpolate.interp1d(r, velocity_duals[:,dual_index,:], axis=-1)(r_range) #m == 1 solve; recall there is some power in utheta, too
 
         #Calculate and store transfer function
-        good_om, good_T = calculate_refined_transfer(om, values, uh_dual_interp, s1_amplitudes, r_range, ell, rho, chi_rad, N2_max, gamma, discard_num=discard, plot=plot)
+        good_om, good_T = calculate_refined_transfer(om, values, uh_dual_interp, s1_amplitudes, r_range, ell, rho, chi_rad, N2, N2_max, gamma, discard_num=0, plot=False)#plot)
 #        good_T = good_T[depthfunc(good_om) <= 3] #filter only low-depth modes!
 #        good_om = good_om[depthfunc(good_om) <= 3] #filter only low-depth modes!
 
 
-        raw_om, raw_T = calculate_refined_transfer(om, raw_values, uh_dual_interp, s1_amplitudes, r_range, ell, rho, chi_rad, N2_max, gamma, discard_num=discard)
+        raw_om, raw_T = calculate_refined_transfer(om, raw_values, uh_dual_interp, s1_amplitudes, r_range, ell, rho, chi_rad, N2, N2_max, gamma, discard_num=0)
 #        raw_T = raw_T[depthfunc(raw_om) <= 3] #filter only low-depth modes!
 #        raw_om = raw_om[depthfunc(raw_om) <= 3] #filter only low-depth modes!
 
-        print('N2 adjust:', N2_adjust)
-        good_T *= np.sqrt(N2_adjust)
-        raw_T  *= np.sqrt(N2_adjust)
+#        print('N2 adjust:', N2_adjust)
+#        good_T *= np.sqrt(N2_adjust)
+#        raw_T  *= np.sqrt(N2_adjust)
 
         if plot:
             plt.figure()

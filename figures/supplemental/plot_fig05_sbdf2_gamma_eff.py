@@ -12,6 +12,7 @@ from compstar.dedalus.evp_functions import SBDF2_gamma_eff as eff
 from dedalus.tools.general import natural_sort
 
 
+a_corr = 0.4
 
 files = natural_sort(glob.glob('../../data/dedalus/eigenvalues/dual*ell*.h5'))
 with h5py.File('../../dedalus/zams_15Msol_LMC/wave_propagation/nr256/star/star_256+192+64_bounds0-0.93R_Re1.00e+04_de1.5_cutoff1.0e-10.h5', 'r') as starf:
@@ -68,8 +69,8 @@ for file in files:
         plt.xscale('log')
 
         plt.axes(axbot)
-        plt.loglog(transfer_om/(2*np.pi), transfer, lw=2, c='k')
-        plt.loglog(raw_transfer_om/(2*np.pi), raw_transfer, lw=1, c='orange')
+        plt.loglog(transfer_om/(2*np.pi), a_corr*transfer, lw=2, c='k')
+        plt.loglog(raw_transfer_om/(2*np.pi), a_corr*raw_transfer, lw=1, c='orange')
         plt.xlabel(r'frequency (d$^{-1}$)')
 
         for ax in [axtop, axbot]:
