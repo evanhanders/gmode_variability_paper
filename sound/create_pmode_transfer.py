@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import logging
 logger = logging.getLogger(__name__)
 
-D = 1
+D = 10
 nu    = 1.349e-5 #m^2/s
 Pr_air = 0.7
 kappa = nu/Pr_air

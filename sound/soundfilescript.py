@@ -7,7 +7,7 @@ import h5py
 from scipy.io.wavfile import read, write
 
 #INPUTS GO HERE
-filename = 'Jupiter_Holst_Clip.wav' #this is “pure sound” we want to "record"
+filename = 'sound_clips/Jupiter_Holst_Clip.wav' #this is “pure sound” we want to "record"
 transfername = "transfer_nmode600_D10.h5" #this is the transfer function that we've already calculated
 dampinglevel = 10 #This changes the strength of damping in our room
 

@@ -10,8 +10,8 @@ plt.rcParams['mathtext.fontset'] = 'dejavusans'
 plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['mathtext.rm'] = 'serif'
 
-#read in h5 file (TODO Evan Update file name)
-filename = 'magnitude_spectra.h5'
+#read in h5 file
+filename = '../data/dedalus/predictions/magnitude_spectra.h5'
 h5 = h5py.File(filename,'r')
 frequ = h5['frequencies'][()]
 msol_15_amp = h5['15msol_ZLMC_magnitude_sum'][()]

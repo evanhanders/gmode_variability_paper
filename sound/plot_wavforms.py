@@ -33,7 +33,7 @@ def ifour(data):
 def freq(data,Fs):
     return rfftfreq(len(data),d=1/Fs)
 
-songname = 'Jupiter_Holst_Clip.wav'
+songname = 'sound_clips/Jupiter_Holst_Clip.wav'
 #reading in files
 data, Fs = sf.read(songname)
 #saving norm constant

@@ -12,7 +12,14 @@ plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['mathtext.rm'] = 'serif'
 
 def sonify(mass):
-    filename = 'wave_luminosities_{}.h5'.format(mass) #TODO evan add filename structure
+    if mass == 3:
+        filename = '../data/dedalus/wave_fluxes/zams_03Msol_solarZ/nr256/wave_luminosities.h5'
+    elif mass == 15:
+        filename = '../data/dedalus/wave_fluxes/zams_15Msol_LMC/re03200/wave_luminosities.h5'
+    elif mass == 40:
+        filename = '../data/dedalus/wave_fluxes/zams_40Msol_solarZ/nr256/wave_luminosities.h5'
+    else:
+        raise ValueError("no wave luminosity for mass = {}".format(mass))
     h5 = h5py.File(filename,'r')
     luminosity = h5['cgs_wave_luminosity(r=1.25)']
     luminosity= np.sum(luminosity, axis=2)

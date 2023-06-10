@@ -49,8 +49,8 @@ def interp(transfer_freq, frequ, transfer):
     return mask
 
 
-#read in h5 file to get stellar transfer functions TODO evan add filename
-filename = 'magnitude_spectra.h5'
+#read in h5 file to get stellar transfer functions
+filename = '../data/dedalus/predictions/magnitude_spectra.h5'
 h5 = h5py.File(filename,'r')
 msol_15_transfer = h5['15msol_ZLMC_transfer_cube'][()][0]
 msol_40_transfer = h5['40msol_Zsolar_transfer_cube'][()][0]
@@ -66,7 +66,7 @@ shifted = np.full_like(transfer_frequencies, shift_factor)
 shifted_frequencies = shifted*transfer_frequencies
 
 #Read in jupiter clip
-filename = 'Jupiter_Holst_Clip.wav'
+filename = 'sound_clips/Jupiter_Holst_Clip.wav'
 Fs, data = read(filename)
 
 #take fourier transform
