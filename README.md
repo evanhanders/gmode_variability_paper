@@ -19,7 +19,7 @@ See [the GYRE documentation](https://gyre.readthedocs.io/en/v7.0/index.html) for
 ### Computing GYRE magnitude perturbations and computing the transfer function
 
 To compute the magnitude perturbation associated with each GYRE eigenmode, we use MSG version 1.1.2, [documented here](https://msg.readthedocs.io/en/v1.1.2/).
-MSG relies on a spectroscopic grid file and passband file; to recreate our work, download the 'msg_grid_passbands.tar' tarball from (TODO) and unpack it into the data/ directory of this repository (after unpacking the tarball you should have a folder called data/MSG/).
+MSG relies on a spectroscopic grid file and passband file; to recreate our work, download the 'msg_grid_passbands.tar' tarball from zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7764997.svg)](https://doi.org/10.5281/zenodo.7764997) and unpack it into the data/ directory of this repository (after unpacking the tarball you should have a folder called data/MSG/).
 
 The transfer function logic is implemented under-the-hood in the [evanhanders/compressible_stars](https://github.com/evanhanders/compressible_stars) directory, see 'Dedalus Simulations' section below.
 To generate the transfer function with MSG and compressible_stars installed, execute `python3 transfer_gyre.py` inside of each of the working directories.
@@ -49,7 +49,7 @@ To compute the eigenvalues and eigenvectors associated with a Dedalus simulation
 To compute the Dedalus transfer function, run `python3 transfer.py` after completing the eigenvalue solve.
 
 Data products associated with running all of these types of simulations are available online.
-To make them locally accessible, download the 'dedalus_and_obs.tar' tarball from (TODO) and unpack it into the data/ directory of this repository (after unpacking the tarball you should have a folder called data/dedalus/).
+To make them locally accessible, download the 'dedalus_and_obs.tar' tarball from zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7764997.svg)](https://doi.org/10.5281/zenodo.7764997) and unpack it into the data/ directory of this repository (after unpacking the tarball you should have a folder called data/dedalus/).
 
 ## Producing Figures
 
@@ -58,7 +58,7 @@ The scripts used to generate all of the figures in the main manuscript and suppl
 ## Supplemental Information
 
 An early draft of the supplemental information containing the precise implementation of equations can be found in the `supplemental/dense_supplemental_materials_v01.pdf` file.
-A shorter version similar to the one published with the manuscript is available in the same directory.
+A shorter version similar to the one published with the manuscript is available in the `supplemental/supplemental_materials_v02.pdf` file.
 
 ## Sonification
 
