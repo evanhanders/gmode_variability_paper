@@ -64,3 +64,4 @@ A shorter version similar to the one published with the manuscript is available 
 
 To make our results more accessible, we have created a sonification of the data presented in the manuscript, available in the `sound/` directory.
 Please refer to the `sound/gmode_sonification.pdf` file for a narrative description of these sonified results.
+To run the scripts in the sound directory and to create the figures in that PDF, we used [pydub-0.25.1](http://pydub.com/), [soundfile-0.12.1](https://github.com/bastibe/python-soundfile), and [moviepy-1.0.3](https://zulko.github.io/moviepy/).
